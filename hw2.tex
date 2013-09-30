@@ -1,11 +1,12 @@
 %        File: hw2.tex
-%     Created: Sun Sep 29 05:00 PM 2013 E
-% Last Change: Sun Sep 29 05:00 PM 2013 E
+%     Created: Sun Oct 2 05:00 PM 2013 E
+% Last Change: Sun Oct 2 05:00 PM 2013 E
 %
 \documentclass[a4paper]{report}
 
 \title{HW 2}
 \author{Delos Chang}
+\date{}
 
 \usepackage{amsmath, amsthm, amssymb}
 \newcommand{\justif}[2]{&{#1}&\text{#2}}
@@ -28,7 +29,7 @@
     First, $max(f(n), g(n))$ will result in either $f(n)$ or $g(n)$ but always smaller than $f(n) + g(n)$. Hence:
 
     \begin{align}
-      max(f(n), g(n)) \leq 1 * (f(n) + g(n))              &&\text{ Math: self-evident}
+      max(f(n), g(n)) \leq 1 \cdot (f(n) + g(n))              &&\text{ Math: self-evident}
     \end{align}
 
     Thus, $max(f(n), g(n)) = O(f(n) + g(n))$ when $c_{2} = 1$ (as $f(n)$ and $g(n)$ are asymptotically non-negative). 
@@ -38,8 +39,8 @@
     \begin{align}
       max(f(n), g(n)) \geq  f(n)                          &&\text{Math: self-evident}\\
       max(f(n), g(n)) \geq  g(n)                          &&\text{Math: self-evident}\\
-      2 * (max(f(n),g(n))) \geq f(n) + g(n)               &&\text{Adding (2) and (3) }\\
-      max(f(n),g(n)) \geq \frac{1}{2}*(f(n) + g(n))       &&\text{Math: division}
+      2 \cdot (max(f(n),g(n))) \geq f(n) + g(n)               &&\text{Adding (2) and (3) }\\
+      max(f(n),g(n)) \geq \frac{1}{2} \cdot (f(n) + g(n))       &&\text{Math: division}
     \end{align}
 
     Thus, $max(f(n), g(n)) = \Omega(f(n) + g(n))$ when $c_{1} = \frac{1}{2}$ (as $f(n)$ and $g(n)$ are asymptotically non-negative). 
@@ -52,6 +53,24 @@
     \par
     \bigskip
 
+    \item To prove that $f(n) = \Omega(h(n))$, we must show, by definition, that $f(n) \geq c_{3} h(n)$ for positive real constants $c_{3}$ and $n_{3}$ such that, for all $n \geq n_{3}$.
+
+    Let there be positive real constants, $n_{1}$, $n_{2}$, $c_{1}$, $c_{2}$ such that $f(n) \geq c_{1} \cdot g(n)$ for $n \geq n_{1}$ and $g(n) \geq c_{2} \cdot h(n)$ for $n \geq n_{2}$.
+    Given $n$, $f(n) > 0, g(n) > 0, h(n) > 0$, let $n_{3} = max(n_{1}, n_{2})$. Let $c_{3} = c_{1} \cdot c_{2}$.
+
+    \begin{align}
+      f(n) \geq c_{1} \cdot g(n), n \geq n_{1}             &&\text{Def of $\Omega$}\\
+      g(n) \geq c_{2} \cdot h(n), n \geq n_{2}             &&\text{Def of $\Omega$}\\
+      f(n) \geq c_{1} \cdot c_{2} \cdot h(n), n \geq n_{3} &&\text{Substitution of g(n)}\\
+      f(n) \geq c_{3} \cdot h(n), n \geq n_{3}             &&\text{$c_{3} = c_{1} \cdot c_{2}$}
+    \end{align}
+
+    Because $c_{3}$ is also a constant, and for all $n$, $f(n) > 0, g(n) > 0$ and $h(n) > 0$, by definition,
+    $f(n) = \Omega(h(n)$).
+
+    %&=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& =
+    % Question 3 
+    %&=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& =
     \item 
 
   \end{enumerate}
