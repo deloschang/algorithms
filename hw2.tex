@@ -7,9 +7,37 @@
 \title{HW 2}
 \author{Delos Chang}
 
+\usepackage{amsmath, amsthm, amssymb}
+\newcommand{\justif}[2]{&{#1}&\text{#2}}
+
 \begin{document}
   \maketitle
-  1. To prove that $max(f(n),g(n)) = \theta (f(n) + g(n))$
+
+  1. To prove that $max(f(n),g(n)) = \theta (f(n) + g(n))$, we must show that there exist positive real constants $c_{1}$, $c_{2}$ and $n_{0}$ such that
+
+    $$0 \leq c_{1}(f(n) + g(n)) \leq max(f(n),g(n)) \leq c_{2}(f(n) + g(n))$$
+  
+  for all $n \geq n_{0}$ (from basic definition of $\theta$-notation, $\Omega$-notation and $O$-notation). 
+  Because $f(n)$ and $g(n)$ are asymptotically non-negative, $f(n)$ and $g(n)$ become non-negative once $n$ crosses a threshold value.
+
+  We show that $max(f(n), g(n)) = O(f(n) + g(n))$.
+
+  \begin{align}
+    max(f(n), g(n)) \leq 1 * (f(n) + g(n))              &\quad &\text{ Math: self-evident}
+  \end{align}
+
+  Thus, the right inequality holds when $c_{2} = 1$. 
+
+  Next, we show that $max(f(n), g(n)) = \Omega(f(n) + g(n))$.
+
+  \begin{align}
+    max(f(n), g(n)) \geq  f(n)                          &&\text{Math: self-evident}\\
+    max(f(n), g(n)) \geq  g(n)                          &&\text{Math: self-evident}\\
+    2 * (max(f(n),g(n))) \geq f(n) + g(n)               &&\text{Substituting (2) and (3) }
+  \end{align}
+    
+
+    
 
 \end{document}
 
