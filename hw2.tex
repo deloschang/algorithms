@@ -12,10 +12,8 @@
 \newcommand{\justif}[2]{&{#1}&\text{#2}}
 
 \pagestyle{fancy}
-\rhead{Delos Chang (help from Prof.)}
+\rhead{HW 2:  Delos Chang (help from Prof.)}
 \begin{document}
-  \maketitle
-
   \begin{enumerate}
     %&=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& =
     % Question 1 
@@ -38,10 +36,11 @@
 
     Next, we show that $max(f(n), g(n)) = \Omega(f(n) + g(n))$. $max(f(n), g(n))$ will result in either $f(n)$ or $g(n)$. The result must be equal to or greater than $f(n)$ or $g(n)$, by definition.
 
+    \setcounter{equation}{0}
     \begin{align}
       max(f(n), g(n)) \geq  f(n)                          &&\text{Math: self-evident}\\
       max(f(n), g(n)) \geq  g(n)                          &&\text{Math: self-evident}\\
-      2 \cdot (max(f(n),g(n))) \geq f(n) + g(n)               &&\text{Adding (2) and (3) }\\
+      2 \cdot (max(f(n),g(n))) \geq f(n) + g(n)               &&\text{Adding (1) and (2) }\\
       max(f(n),g(n)) \geq \frac{1}{2} \cdot (f(n) + g(n))       &&\text{Math: division}
     \end{align}
 
@@ -60,6 +59,7 @@
     Let there be positive real constants, $n_{1}$, $n_{2}$, $c_{1}$, $c_{2}$ such that $f(n) \geq c_{1} \cdot g(n)$ for $n \geq n_{1}$ and $g(n) \geq c_{2} \cdot h(n)$ for $n \geq n_{2}$.
     Given $n$, $f(n) > 0, g(n) > 0, h(n) > 0$, let $n_{3} = max(n_{1}, n_{2})$. Let $c_{3} = c_{1} \cdot c_{2}$.
 
+    \setcounter{equation}{0}
     \begin{align}
       f(n) \geq c_{1} \cdot g(n), n \geq n_{1}             &&\text{Def of $\Omega$}\\
       g(n) \geq c_{2} \cdot h(n), n \geq n_{2}             &&\text{Def of $\Omega$}\\
@@ -75,8 +75,25 @@
     %&=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& =
     \par
     \bigskip
+    \setcounter{equation}{0}
 
-    \item 
+    \item Proof by contradiction: 
+
+    First, assume $n^2 = O(5n)$. Then it follows, by def of $O$-notation, that there exists positive real constants $c_{0}$ and $n_{0}$ such that:
+    \begin{align}
+      n^2 \leq c_{0} \cdot 5n, n \geq n_{0}               &&\text{Def of $O$}\\
+      n \leq c_{0} \cdot 5, n \geq n_{0}                  &&\text{Simplification}
+    \end{align}
+
+    Because $n$ can be arbitrarily large because of $n \geq n_{0}$, as $n$ approaches $\infty$ $n \nleq c_{0} \cdot 5$ does not hold. 
+  Thus, by proof of contradiction using the def of $O$, we have shown that $n^2 \neq O(5n)$.
+
+    %&=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& =
+    % Question 3 
+    %&=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& =
+    \par
+    \bigskip
+    \setcounter{equation}{0}
 
   \end{enumerate}
 
