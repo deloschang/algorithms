@@ -89,11 +89,22 @@
   Thus, by proof of contradiction using the def of $O$, we have shown that $n^2 \neq O(5n)$.
 
     %&=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& =
-    % Question 3 
+    % Question 4 
     %&=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& =
     \par
     \bigskip
     \setcounter{equation}{0}
+    
+    \item Let there be positive real constants $c_{0}$ and $n_{0}$, $n \geq n_{0}$. Also, let $c_{1} = \frac{1}{c_{0}}$. By definition of $O$-notation, 
+
+    \begin{align}
+      f'(n) = O(f(n))                                   &&\text{Given }\\
+      f'(n) \leq c_{0} \cdot f(n), n \geq n_{0}          &&\text{Def of $O$}\\
+      \frac{1}{c_{0}} \cdot f'(n) \leq \cdot f(n), n \geq n_{0}          &&\text{Math}\\
+      f(n) \geq c_{1} \cdot f'(n), n \geq n_{0}          &&\text{Math: $c_{1} = \frac{1}{c_{0}}$}\\
+      f(n)  = \Omega(f'(n))                               &&\text{Def of $\Omega$}\\
+    \end{align}
+
 
   \end{enumerate}
 
