@@ -22,29 +22,29 @@
 
       $$0 \leq c_{1}(f(n) + g(n)) \leq max(f(n),g(n)) \leq c_{2}(f(n) + g(n))$$
     
-    for all $n \geq n_{0}$ (from basic definition of $\theta$-notation, $\Omega$-notation and $O$-notation). 
-    Because $f(n)$ and $g(n)$ are asymptotically non-negative, $f(n)$ and $g(n)$ become non-negative once $n$ crosses a threshold value, thus guaranteeing a positive real constant $n_{0}$.
+    for all $n \geq n_{0}$ (definitions). 
 
-    We show that $max(f(n), g(n)) = O(f(n) + g(n))$.
-    First, $max(f(n), g(n))$ will result in either $f(n)$ or $g(n)$ but always smaller than $f(n) + g(n)$. Hence:
+    Because $f(n)$ and $g(n)$ are asymptotically non-negative, 
+    consider a $n_{0}$ such that for all $n \geq n_{0}$, $f(n) \geq 0$ and $g(n) \geq 0$. Thus, $max(f(n),g(n)) \geq 0$ for all $n \geq n_{0}$.
 
+    Claim: $max(f(n), g(n)) = O(f(n) + g(n))$.
     \begin{align}
-      max(f(n), g(n)) \leq 1 \cdot (f(n) + g(n))              &&\text{ Math: self-evident}
+      max(f(n), g(n)) \leq 1 \cdot (f(n) + g(n)) \text{ for all } n \geq n_{0}              &&\text{ Math: self-evident}
     \end{align}
 
-    Thus, $max(f(n), g(n)) = O(f(n) + g(n))$ when $c_{2} = 1$ (as $f(n)$ and $g(n)$ are asymptotically non-negative). 
+    Thus, $max(f(n), g(n)) = O(f(n) + g(n))$ when $c_{2} = 1$ and $n \geq n_{0}$ (asymptotically negative). 
 
-    Next, we show that $max(f(n), g(n)) = \Omega(f(n) + g(n))$. $max(f(n), g(n))$ will result in either $f(n)$ or $g(n)$. The result must be equal to or greater than $f(n)$ or $g(n)$, by definition.
+    Next, we claim that $max(f(n), g(n)) = \Omega(f(n) + g(n))$. $max(f(n), g(n))$ will result in either $f(n)$ or $g(n)$. The result must be equal to or greater than $f(n)$ or $g(n)$, by definition.
 
     \setcounter{equation}{0}
     \begin{align}
-      max(f(n), g(n)) \geq  f(n)                          &&\text{Math: self-evident}\\
-      max(f(n), g(n)) \geq  g(n)                          &&\text{Math: self-evident}\\
-      2 \cdot (max(f(n),g(n))) \geq f(n) + g(n)               &&\text{Adding (1) and (2) }\\
-      max(f(n),g(n)) \geq \frac{1}{2} \cdot (f(n) + g(n))       &&\text{Math: division}
+      max(f(n), g(n)) \geq  f(n) \text { for all } n \geq n_{0}                         \\
+      max(f(n), g(n)) \geq  g(n)  \text { for all } n \geq n_{0}                         \\
+      2 \cdot (max(f(n),g(n))) \geq f(n) + g(n) \text { for all } n \geq n_{0}               \\
+      max(f(n),g(n)) \geq \frac{1}{2} \cdot (f(n) + g(n)) \text { for all } n \geq n_{0}       
     \end{align}
 
-    Thus, $max(f(n), g(n)) = \Omega(f(n) + g(n))$ when $c_{1} = \frac{1}{2}$ (as $f(n)$ and $g(n)$ are asymptotically non-negative). 
+    Thus, $max(f(n), g(n)) = \Omega(f(n) + g(n))$ when $c_{1} = \frac{1}{2}$ and $n \geq n_{0}$ (asymptotically negative).
 
     Because $max(f(n), g(n)) = \Omega(f(n) + g(n))$ and $max(f(n), g(n)) = O(f(n) + g(n))$, by definition of $\theta$-notation, $max(f(n), g(n)) = \theta(f(n) + g(n))$.
 
@@ -54,21 +54,26 @@
     \par
     \bigskip
 
-    \item To prove that $f(n) = \Omega(h(n))$, we must show, by definition, that $f(n) \geq c_{3} h(n)$ for positive real constants $c_{3}$ and $n_{3}$ such that, for all $n \geq n_{3}$.
+    \item To prove that $f(n) = \Omega(h(n))$, we must show, by definition, that there exist
+      positive real constants $c_{3}$ and $n_{3}$ such that, for all $n \geq n_{3}$, $f(n) \geq c_{3} \cdot h(n)$.
 
-    Let there be positive real constants, $n_{1}$, $n_{2}$, $c_{1}$, $c_{2}$ such that $f(n) \geq c_{1} \cdot g(n)$ for $n \geq n_{1}$ and $g(n) \geq c_{2} \cdot h(n)$ for $n \geq n_{2}$.
-    Given $n$, $f(n) > 0, g(n) > 0, h(n) > 0$, let $n_{3} = max(n_{1}, n_{2})$. Let $c_{3} = c_{1} \cdot c_{2}$.
+    Let there be positive real constants, $n_{1}$, $n_{2}$, $c_{1}$, $c_{2}$ such that $f(n) \geq c_{1} \cdot g(n)$ for all $n \geq n_{1}$ and $g(n) \geq c_{2} \cdot h(n)$ for all $n \geq n_{2}$.
+
+    Given $n$, $f(n) > 0, g(n) > 0, h(n) > 0$ (inequalities are preserved), let $n_{3} = max(n_{1}, n_{2})$. 
+
+    Let $c_{3} = c_{1} \cdot c_{2}$.
 
     \setcounter{equation}{0}
     \begin{align}
-      f(n) \geq c_{1} \cdot g(n), n \geq n_{1}             &&\text{Def of $\Omega$}\\
-      g(n) \geq c_{2} \cdot h(n), n \geq n_{2}             &&\text{Def of $\Omega$}\\
-      f(n) \geq c_{1} \cdot c_{2} \cdot h(n), n \geq n_{3} &&\text{Substitution of g(n)}\\
-      f(n) \geq c_{3} \cdot h(n), n \geq n_{3}             &&\text{$c_{3} = c_{1} \cdot c_{2}$}
+      f(n) \geq c_{1} \cdot g(n), \text { for all } n \geq n_{1}             &&\text{Def of $\Omega$}\\
+      g(n) \geq c_{2} \cdot h(n), \text { for all } n \geq n_{2}             &&\text{Def of $\Omega$}\\
+      f(n) \geq c_{1} \cdot c_{2} \text { for all } \cdot h(n), n \geq n_{3} &&\text{Substitution of g(n)}\\
+      f(n) \geq c_{3} \cdot h(n), \text { for all } n \geq n_{3}             &&\text{$c_{3} = c_{1} \cdot c_{2}$}
     \end{align}
 
-    Because $c_{3}$ is also a constant, and for all $n$, $f(n) > 0, g(n) > 0$ and $h(n) > 0$, by definition,
-    $f(n) = \Omega(h(n)$).
+    For all $n$, $f(n) > 0, g(n) > 0$ and $h(n) > 0$.
+    Because there exist positive real constants $c_{3}$ and $n_{3}$ such that for all $n \geq n_{3}$, 
+    $f(n) \geq c_{3} \cdot h(n)$, by definition, $f(n) = \Omega(h(n)$).
 
     %&=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& =
     % Question 3 
@@ -79,14 +84,15 @@
 
     \item Proof by contradiction: 
 
-    First, assume $n^2 = O(5n)$. Then it follows, by def of $O$-notation, that there exists positive real constants $c_{0}$ and $n_{0}$ such that:
+    First, assume $n^2 = O(5n)$. Then it follows, by def of $O$-notation, that there exist positive real constants $c_{0}$ and $n_{0}$ such that:
     \begin{align}
-      n^2 \leq c_{0} \cdot 5n, n \geq n_{0}               &&\text{Def of $O$}\\
-      n \leq c_{0} \cdot 5, n \geq n_{0}                  &&\text{Simplification}
+      n^2 \leq c_{0} \cdot 5n, \text{for all } n \geq n_{0}               &&\text{Def of $O$}\\
+      n \leq c_{0} \cdot 5, \text{for all } n \geq n_{0}                  &&\text{Simplification}
     \end{align}
 
-    Because $n$ can be arbitrarily large because of $n \geq n_{0}$, as $n$ approaches $\infty$ $n \nleq c_{0} \cdot 5$ does not hold. 
-  Thus, by proof of contradiction using the def of $O$, we have shown that $n^2 \neq O(5n)$.
+    Consider $n = max(n_{0}, 5c) + 1$ which disproves the statement that $n \leq c_{0} \cdot 5$ for all $n \geq n_{0}$.
+
+    Thus, by proof of contradiction using the def of $O$, we have shown that $n^2 \neq O(5n)$.
 
     %&=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& =
     % Question 4 
@@ -97,7 +103,6 @@
     
     \item Let there be positive real constants $c_{0}$ and $n_{0}$, $n \geq n_{0}$. Also, let $c_{1} = \frac{1}{c_{0}}$. By definition of $O$-notation, 
 
-    Assuming $f(n)$ and $g(n)$ are asymptotically non-negative: 
     \begin{align}
       f'(n) = O(f(n))                                   &&\text{Given }\\
       f'(n) \leq c_{0} \cdot f(n), n \geq n_{0}          &&\text{Def of $O$}\\
@@ -138,7 +143,7 @@
         5^{log n} = n^{log 5} 
       \end{align}
 
-      Because $log 6 > log 5$, $n^{log 5}$ = $o(n^{log 6})$.
+      Because $log 6 > log 5$, $n^{log 5}$ = $o(n^{log 6})$. Thus, $5^{log n} = o(6^{log n})$.
 
       \bigskip
       % c)
@@ -155,7 +160,7 @@
 
       \bigskip
       % d)
-      d) 
+      **d) 
       Consider when $n$ is even and $n > 6$, $f(n) = 6n$ so $n^2 > f(n)$. Thus, there are an infinite number of $n$'s where $n^2 > f(n)$.
       Similarly, when $n$ is odd and $n > 0$, $f(n) = 5n^2$ so $n^2 < f(n)$. Thus, there are an infinite number of $n$'s where $n^2 < f(n)$. 
 
@@ -169,7 +174,7 @@
 
       \bigskip
       % e)
-      e) Fact: If log $f(n) = o($log $g(n))$, then $f(n) = o(g(n))$. 
+      **e) Fact: If log $f(n) = o($log $g(n))$, then $f(n) = o(g(n))$. 
       Using this fact, let $f(n) = (n!)^{n}$ and $g(n) = 2^(2n)$. Thus, taking logs of both sides:
 
       \begin{align}
@@ -209,7 +214,7 @@
     \setcounter{equation}{0}
     \item We disprove the statement by considering a counterexample: 
 
-      Consider $f(n)$ where $f$ is defined as follows: $f(n) = 1$ if $n$ is even; else $f(n) = n^{-1}$.
+      Consider $g(n) = 1$ everywhere and $f(n)$ where $f$ is defined as follows: $f(n) = 1$ if $n$ is even; else $f(n) = n^{-1}$.
       Let $c = 1$ and $n_{0} = 1$. Then:
 
       $f(n) \leq c \cdot g(n)$ for all $n \geq n_{0}$.
@@ -239,6 +244,82 @@
   \end{enumerate}
 
   
+  i = 1; j = 1; result = false;
+                 14   15            33
+  1 0 0 0 0 0 0 \dots 1
+  .
+  .
+  .
+  15                  0 0 0 0 0 0 0 1
+  .
+  .
+  .
+  33                                0 0 0 0 0 0 0 0 X
+
+  33 row should be 0; 33 column 1 except 33,33
+
+
+
+
+  %cand = 1
+  %v = 2
+  %while ( i \leq |v|){
+    %A[cand, i] &=&  1
+      %cand = i
+    %i++
+  %}
+  %return(check(cand))
+%5c) imply not little-o or little-omega
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   
 
 \end{document}
