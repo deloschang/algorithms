@@ -189,7 +189,7 @@
     \pagebreak
     \bigskip
     \setcounter{equation}{0}
-    \item We disprove the statement by showing a case where log $f(n) = O($log $g(n))$ but $f(n) \neq O(g(n))$: 
+    \item We disprove the statement by considering a counterexample where log $f(n) = O($log $g(n))$ but $f(n) \neq O(g(n))$: 
     
       Consider $f(n) = n^3$ and $g(n) = n$. 
 
@@ -202,10 +202,40 @@
       We have shown first part of the implication. But it is evident that $n = O(n^3)$.
       Thus, while log $f(n) = O($log $g(n))$, $f(n) \neq O(g(n))$, disproving the statement.
 
+    %&=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& =
+    % Question 7 
+    %&=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& =
+    \bigskip
+    \setcounter{equation}{0}
+    \item We disprove the statement by considering a counterexample: 
 
+      Consider $f(n)$ where $f$ is defined as follows: $f(n) = 1$ if $n$ is even; else $f(n) = n^{-1}$.
+      Let $c = 1$ and $n_{0} = 1$. Then:
 
+      $f(n) \leq c \cdot g(n)$ for all $n \geq n_{0}$.
+      Simplifying $f(n) \leq 1$ for all $n \geq n_{0}$, which is true because the biggest value $f(n)$ can be is 1.
 
+      Thus, by definition, $f(n) = O(g(n))$.
+
+      Next, we show that $f(n) \neq \Omega(g(n))$.
+
+      Because $f(n) = n^{-1}$ when $n$ is odd, there are infinite n's that dip below any constant infinitely often.
+      In other words, as n approaches infinity, $f(n)$ oscillates between 1 and falls below any constant infinitely. 
+      Thus, no positive real constant $n_{0}$ exists such that $f(n) \geq c \cdot g(n)$ for all $n \geq n_{0}$.
+
+      Hence, by definition, $f(n) \neq \Omega(g(n))$. 
       
+      Finally, we show that $f(n) \neq o(g(n))$.
+      For $f(n) = o(g(n))$ to be true, for {\bf any} positive constant $c > 0$, there must exist a constant $n_{0} > 0$ such that
+      $0 \leq f(n) < c \cdot g(n)$ for all $n \geq n_{0}$. 
+
+      Consider $c = 0.4$. $g(n) = 1$ everywhere and $f(n) > 0.4 * 1$ infinitely many times as n approaches infinity 
+      (when n is even). Thus, there is no $n_{0} > 0 $ such that $0 \leq f(n) < c \cdot g(n)$ for all $n \geq n_{0}$.  
+      
+      Because we have shown this condition to fail for $c = 0.4$, $f(n) \neq o(g(n))$.
+
+      Hence, we have disproved the statement.
+
   \end{enumerate}
 
   
