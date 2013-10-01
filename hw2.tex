@@ -97,15 +97,101 @@
     
     \item Let there be positive real constants $c_{0}$ and $n_{0}$, $n \geq n_{0}$. Also, let $c_{1} = \frac{1}{c_{0}}$. By definition of $O$-notation, 
 
+    Assuming $f(n)$ and $g(n)$ are asymptotically non-negative: 
     \begin{align}
       f'(n) = O(f(n))                                   &&\text{Given }\\
       f'(n) \leq c_{0} \cdot f(n), n \geq n_{0}          &&\text{Def of $O$}\\
       \frac{1}{c_{0}} \cdot f'(n) \leq \cdot f(n), n \geq n_{0}          &&\text{Math}\\
       f(n) \geq c_{1} \cdot f'(n), n \geq n_{0}          &&\text{Math: $c_{1} = \frac{1}{c_{0}}$}\\
-      f(n)  = \Omega(f'(n))                               &&\text{Def of $\Omega$}\\
+      f(n)  = \Omega(f'(n))                               &&\text{Def of $\Omega$}
     \end{align}
 
+    
+    %&=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& =
+    % Question 5 
+    %&=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& =
+    \pagebreak
+    \bigskip
+    \setcounter{equation}{0}
 
+    \item 
+      % a)
+
+      Let all following log bases not be 1. 
+
+      a) Fact: If log $f(n) = o($log $g(n))$, then $f(n) = o(g(n))$. 
+      Using this fact, let $f(n) = 2^n$ and $g(n) = n!$. Thus, taking logs of both sides:
+
+      \begin{align}
+        log(2^n) = n \cdot log 2 \\
+        log(2^n) = n \\
+        log(n!) = \theta(n \cdot log n) \\
+      \end{align}
+
+      Because $\theta(n \cdot$ log $n) = o(n)$, it follows that $2^n = o(n!)$.
+
+      \bigskip
+      % b)
+      b) Fact: $a^{log_{b} c}$ = $c ^ {log_{b} a} $. Thus:
+      \begin{align}
+        6^{log n} = n^{log 6} \\
+        5^{log n} = n^{log 5} 
+      \end{align}
+
+      Because $log 6 > log 5$, $n^{log 5}$ = $o(n^{log 6})$.
+
+      \bigskip
+      % c)
+      c) The co-domain of a sine function is [-1, 1]. Thus, for all $n$, $n^{-1} \leq n^{sin n} \leq n$.
+
+      Thus, depending on $n$, sometimes $n^{sin n} > \sqrt{n}$, sometimes $n^{sin n} < \sqrt{n}$.
+      It follows that there are no positive real constants $n_{0}, c$ such that for all $n \geq n_{0}$,  $n^{sin n} \geq c \cdot \sqrt{n}$.
+      For every $n_{1}$ where $n_{1}^{sin n_{1}} \geq c \cdot \sqrt{n_{1}}$, there exist a $n_{2}$ where $n_{2} > n_{1}$ and $n_{2}^{sin n_{2}} \leq c \cdot \sqrt{n_{2}}$.
+
+      For the same reason, there are no positive real constants $n_{0}$, $c$ such that for all $n \geq n_{0}$, 
+      $n^{sin n} \leq c \cdot \sqrt{n}$.
+
+      Hence, there is no asymptotic relationship to be described.
+
+      \bigskip
+      % d)
+      d) 
+      Consider when $n$ is even and $n > 6$, $f(n) = 6n$ so $n^2 > f(n)$. Thus, there are an infinite number of $n$'s where $n^2 > f(n)$.
+      Similarly, when $n$ is odd and $n > 0$, $f(n) = 5n^2$ so $n^2 < f(n)$. Thus, there are an infinite number of $n$'s where $n^2 < f(n)$. 
+
+      Because there are infinite numbers of $n$ where $f(n)$ can be both $<$ and $>$ than $n^2$, there are no positive real constants $n_{0}$ and $c$ such that 
+      for all $n \geq n_{0}$, $f(n) \geq c \cdot n^2$.
+
+      For the same reason, there are no positive real constants $n_{0}$, $c$ such that for all $n \geq n_{0}$, 
+      $f(n) \leq c \cdot n^2$.
+
+      Hence, there is no asymptotic relationship to be described.
+
+      \bigskip
+      % e)
+      e) Fact: If log $f(n) = o($log $g(n))$, then $f(n) = o(g(n))$. 
+      Using this fact, let $f(n) = (n!)^{n}$ and $g(n) = 2^(2n)$. Thus, taking logs of both sides:
+
+      \begin{align}
+        log(n!^{n}) = n \cdot log(n!)\\
+        log(n!^{n}) = n \cdot \theta(n \cdot log n)\\
+        log(n!^{n}) = \theta(n^2 \cdot log n)\\
+        log(2^{2n}) = 2n 
+      \end{align}
+
+      Since $\theta(n^2 log n) = \omega(2n)$, it follows from the aforementioned fact that:
+
+      $2^{2n} = o((n!)^{n})$
+
+      
+
+
+
+
+
+
+
+      
   \end{enumerate}
 
   
