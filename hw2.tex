@@ -353,7 +353,7 @@
       - Repeat BFS with each disconnected graph. \\
       - If we discover an odd length cycle (i.e. $good$ vertex adjacent to $good$ or $bad$ vertex adjacent to $bad$), stop 
       the algorithm because the conflicting edge proves no proper labelling exists. \\
-      - If no odd length cycle is discovered (no label conflicts), we have produced a labelled graph of $n$ wrestlers and $r$ edges. \\
+      - If no odd length cycles are discovered (no label conflicts), we have produced a correctly labelled graph of $n$ wrestlers and $r$ edges. \\
 
       Let $\pi[v]$ indicate the type $"good", "bad", "nil"$ for vertex $v$.
       \begin{align*}
@@ -403,7 +403,7 @@
       If graph $G$ contains a universal sink, the following algorithm 
       returns the universal sink vertex in time $O(V)$ given adj matrix $A$.
 
-      If graph $G$ does not contain a universal sink, the algorithm returns $false$.
+      If graph $G$ does not contain a universal sink, the algorithm returns $false$ in time $O(V)$.
 
       \begin{align*}
         & \text{main($G=(V,E)$, $A$:adjacency matrix)\{} \\
