@@ -22,9 +22,8 @@ graph = {'S': ['G', 'T', 'B'],
              'H': ['T'],
              'D': ['T']}
 
-graph = {
-
-             'P': ['O','S','Z'],
+# The graph from figure 22.8
+graph2 = { 'P': ['O','S','Z'],
             'M': ['R', 'Q', 'T'],
              'N': ['Q', 'U', 'O'],
              'O': ['R', 'V', 'S'],
@@ -57,7 +56,7 @@ def DFSVisit(u):
     glob_time += 1
     d[u] = glob_time
 
-    for v in graph[u]:
+    for v in graph2[u]:
         print "Exploring vertices adjacent to " + str(v)
 
         # Discovery of vertex
