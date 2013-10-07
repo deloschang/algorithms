@@ -1,5 +1,15 @@
 #!/usr/bin/env python
 
+# This python program solves the following problems:
+# CLRS 22.3-10:
+    # Modify the pseudocode for depth-first search so that it prints out every edge in the directed graph 
+    # G, together with its type. Show what modifications, if any, you need to make if G is undirected.
+
+# CLRS 22.4-2:
+    # Give a linear-time algorithm that takes as input a directed acyclic graph G = (V,E)
+    # and two vertices s and t, and returns the number of simple paths from s to t in G.
+
+
 graph = {'A': ['G', 'E', 'B'],
              'B': ['E', 'H'],
              'G': ['F', 'E'],
