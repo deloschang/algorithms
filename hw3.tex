@@ -8,9 +8,10 @@
 \author{Delos Chang}
 \date{}
 
-\usepackage{amsmath, amsthm, amssymb, fancyhdr, tikz}
+\usepackage{amsmath, amsthm, amssymb, fancyhdr, tikz, algorithmicx, algpseudocode, algorithm}
 \usetikzlibrary{arrows}
 \newcommand{\justif}[2]{&{#1}&\text{#2}}
+\renewcommand{\algorithmicforall}{\textbf{for each}}
 
 \pagestyle{fancy}
 \rhead{HW 3:  Delos Chang (help from Prof.)}
@@ -70,6 +71,8 @@
       $v$, however, is not a descendant of $u$ in the depth-first forest produced because the tree edges 
       in the depth-first forest are: $(a,u)$ and $(a,v)$. 
 
+      Hence, the conjecture is disproved with this counterexample.
+
     %&=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& =
     % Question 3 
     %&=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& =
@@ -106,7 +109,7 @@
 
       The table shows that $d[v]=4$ and $f[u]=3$, thus $d[v] > f[u]$.
 
-      Hence, the conjecture is disproved because a DFS from $a$ yields $d[v] > f[u]$.
+      Hence, the conjecture is disproved because a DFS on $G$ starting from $a$ yields $d[v] > f[u]$.
 
 
     %&=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& =
@@ -119,8 +122,8 @@
       \begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=3cm,
         thick,main node/.style={circle,fill=blue!20,draw,font=\sffamily\Large\bfseries}]
 
-        \node[main node] (1) {a};
-        \node[main node] (2) [left of=1] {u};
+        \node[main node] (1) {u};
+        \node[main node] (2) [left of=1] {a};
         \node[main node] (4) [right of=1] {v};
 
         \path[every node/.style={font=\sffamily\small}]
@@ -128,7 +131,7 @@
         (1) edge node [right] {} (2);
       \end{tikzpicture}
 
-      $u$ evidently has both incoming and outgoing edges in $G$.
+      $u$ evidently has both incoming and outgoing edges in $G$ ($u,a$) and ($v,a$).
 
       Consider a DFS run on the above counterexample directed graph $G$ starting from $a$ with the 
       following discovery and finish times.  
@@ -149,15 +152,87 @@
       $a$ was discovered already. Finally DFS will discover $v$, then finish $v$.
 
       Thus, $u$ is neither an ancestor or a descendant of another vertex. The depth-first tree
-      contains only $u$ with no descendants or ancestors. 
+      will contain only $u$ with no descendants or ancestors. 
 
       Hence, the conjecture is disproved.
 
     %&=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& =
-    % Question 4 
+    % Question 5 
+    %&=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& =
+    \pagebreak
+    \par
+    \bigskip
+
+    \item
+      - We use the parenthesis theorem to check if $u$ is a descendant of $v$. 
+
+      - In a DFS of an undirected graph $G$, every edge of $G$ is either a tree edge or a back edge, which simplifies
+      our classification. In the pseudocode, we would remove the $if$ statement checks for a forward edge and cross edge.
+
+    \begin{algorithmic}
+      \Function{DFS}{$G(V,E)$}
+      \ForAll{$u \in V$}
+        \State color[$u$] = white
+        \State $\pi$[$u$] = nil
+      \EndFor
+      \State $time=0$
+
+
+      \ForAll{$u \in V$}
+        \If {color[$u$] == white}
+          \State DFSVisit($u$)
+        \EndIf
+      \EndFor
+
+      \State // Changes made here to list and classify edges
+      \ForAll{$(u,v) \in E$}
+        \If {$\pi$[$v$] == $u$}
+          \State print Tree Edge: ($u$,$v$)
+        \Else 
+          \If {d[$u$] $<$ d[$v$] $<$ f[$v$] $<$ f[$u$]}
+            \State print Forward Edge: ($u$,$v$)
+          \ElsIf {d[$v$] $<$ d[$u$] $<$ f[$u$] $<$ f[$v$]}
+            \State print Back Edge: ($u$,$v$)
+          \Else
+            \State print Cross Edge: ($u$,$v$)
+          \EndIf
+        \EndIf
+      \EndFor
+      \State // end Changes to list and classify edges
+
+
+    \EndFunction
+    \end{algorithmic}
+
+    The DFSVisit function remains unchanged:
+
+    \begin{algorithmic}
+      \Function{DFSVisit}{$u$}
+      \State color[$u$] = gray
+      \State $time$++
+      \State d[$u$] = time
+
+      \ForAll{$v \in $ Adj[$u$]}
+        \If {color[$v$] == white}
+          \State $pi$[$v$] = $u$
+          \State DFSVisit($v$)
+        \EndIf
+      \EndFor
+
+      color[$u$] = black
+      $time$++
+      f[$u$] = time
+    \EndFunction
+    \end{algorithmic}
+
+    %&=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& =
+    % Question 6 
     %&=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& =
     \par
     \bigskip
+
+    \item
+
 
 
 
