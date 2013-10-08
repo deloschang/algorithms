@@ -184,11 +184,12 @@
         \EndIf
       \EndFor
 
-      \State // Changes made here to list and classify edges
+      \Comment Changes made here to list and classify edges
       \ForAll{$(u,v) \in E$}
         \If {$\pi$[$v$] == $u$}
           \State print Tree Edge: ($u$,$v$)
         \Else 
+          \Comment Parenthesis theorem to determine ancestry
           \If {d[$u$] $<$ d[$v$] $<$ f[$v$] $<$ f[$u$]}
             \State print Forward Edge: ($u$,$v$)
           \ElsIf {d[$v$] $<$ d[$u$] $<$ f[$u$] $<$ f[$v$]}
@@ -198,8 +199,6 @@
           \EndIf
         \EndIf
       \EndFor
-      \State // end Changes to list and classify edges
-
 
     \EndFunction
     \end{algorithmic}
@@ -219,9 +218,9 @@
         \EndIf
       \EndFor
 
-      color[$u$] = black
-      $time$++
-      f[$u$] = time
+      \State color[$u$] = black
+      \State $time$++
+      \State f[$u$] = time
     \EndFunction
     \end{algorithmic}
 
@@ -232,11 +231,300 @@
     \bigskip
 
     \item
+      - Initialize a new integer array $count$ where $count[v]$ holds the number of paths from 
+      that vertex $v$ to the target vertex $t$. 
+
+      - Initialize all $count$ fields for every vertex to be 0. 
+
+      - Run DFS from the source vertex $s$. When DFS discovers the target vertex $t$,
+      set $count[t]$ to 1. Mark $t$ as finished so as to prevent DFS from running from $t$.
+
+      - Each time DFS finishes a vertex $u$, set $count[u]$ to equal the sum of every adjacent
+      vertices' $count$.
+
+      - When DFS completes, print $count[s]$ where $s$ is the source vertex.
+
+    \begin{algorithmic}
+      \Function{DFS}{$G(V,E)$, $s$: source vertex, $t$: target vertex}
+
+      \Comment Added input parameters
+      \ForAll{$u \in V$}
+        \State color[$u$] = white
+        \State $\pi$[$u$] = nil
+        \State $count[u]$ = 0 
+      \Comment each vertex's count starts at 0
+
+      \EndFor
+      \State $time=0$
+
+
+      \ForAll{$u \in V$}
+        \If {color[$u$] == white}
+          \State DFSVisit($u$, $s$, $t$)
+        \EndIf
+      \EndFor
+
+      \Comment $count[s]$ equals number of paths from $s$ to $t$
+      \State return $count[s]$
+
+    \EndFunction
+    \end{algorithmic}
+
+    \begin{algorithmic}
+      \Function{DFSVisit}{$u$, $s$, $t$}
+      \State color[$u$] = gray
+      \State $time$++
+      \State d[$u$] = time
+
+      \ForAll{$v \in $ Adj[$u$]}
+        \If {color[$v$] == white}
+          \State $pi$[$v$] = $u$
+
+
+          \Comment Check if $t$ was discovered
+          \If {v == $t$}
+            \Comment Stop processing DFS from $t$ 
+            \State $count[v]$ = 1
+            \State $color[v]$ = black
+          \Else
+            \Comment Otherwise, continue
+            \State DFSVisit($v$)
+          \EndIf
+        \EndIf
+
+        \Comment add adjacent vertice counts to $u$
+        \State $count[u] += count[v]$
+      \EndFor
+
+      \State color[$u$] = black
+      \State $time$++
+      \State f[$u$] = time
+    \EndFunction
+    \end{algorithmic}
+
+    {\bf Time Complexity:}
+
+    DFS has a time-complexity of $O(|V| + |E|)$ and because this algorithm does not process DFS beyond target vertex $t$, it 
+    may explore less of the graph. 
+
+    The modifications: initialization of $count$, returning the final $count[s]$, $if$ statements, summing are all 
+    $\Theta(1)$ operations. Each operation does not affect the outer for loop's $\Theta(|V|)$.
+
+    Thus, this algorithm has a time complexity of $O(|V| + |E|)$.
+
+    {\bf Correctness:}
+
+    We show the correctness of the algorithm by proving the loop invariant, then showing that the correctness of the loop
+    invariant implies correctness of the algorithm:
+
+    {\bf Loop Invariant:}
+
+    For every black vertex $v$ in the graph $G$, $count[v]$ will hold the number of simple paths from that vertex $v$ to the target 
+    vertex $t$. 
+
+    {\bf Base Case:}
+    At the start of the loop, all vertices are white, thus the loop invariant holds true because no vertices are black. 
+
+    {\bf Maintenance:}
+    Assume that the loop invariant holds at the start of iteration $I'$. Since the iteration $I'$ took place, it follows 
+    from the program that a vertex $v$ is marked black at the start of iteration $I''$. 
+    Thus, for any adjacent vertex $u$ (adjacent to $v$), $u$ must also be black. The loop invariant specifies that $count[u]$ equals 
+    the number of simple paths from $u$ to target vertex $t$. Hence, $\sum$ $_{u\in adj(v)}$ $count[u]$ simple paths 
+    exist from $v$ to $t$. Furthermore, setting $count[v]$ to $\sum$ $_{u\in adj(v)}$ $count[u]$ maintains the loop invariant 
+    correctly. 
+
+    Hence, we have the loop invariant. 
+
+    {\bf Termination:}
+    When the loop terminates, because DFS starts at source vertex $s$, $s$ must be marked black. Therefore, 
+    given the loop invariant, $count[s]$ must hold the number of simple paths from the vertex $s$ (the source) to
+    the target vertex $t$, which is what the program returns.
+
+    Hence, the post-condition is satisfied.
+
+    %&=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& =
+    % Question 7 
+    %&=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& =
+    \par
+    \bigskip
+
+    \item
+      An undirected graph $G = (V,E)$ does not contain a cycle iff a DFS generates no back edges. Furthermore, an undirected
+      graph $G$ has only tree edges and back edges. Therefore, two cases will exist:
+
+        - If undirected graph $G$ has a back edge, then it has a cycle. 
+
+        - If undirected graph $G$ has no back edges, it only has tree edges and therefore, is acyclic.
+
+      Thus, the algorithm will run a modified DFS that checks if an edge $(u,v)$ leads to a gray vertex $v$ and not 
+      $u$'s parent (because the graph is undirected) in the depth-first forest. 
+
+    {\bf Pseudocode:}
+
+    The main $DFS(G)$ function is left unchanged.
+
+    \begin{algorithmic}
+      \Function{DFSVisit}{$u$}
+      \State color[$u$] = gray
+      \State $time$++
+      \State d[$u$] = time
+      \ForAll{$v \in $ Adj[$u$]}
+        \If {$v \neq \pi[u]$ and $color[v]$ == gray}
+          \State return ``cycle exists''
+          \Comment Cycle exists: stop the program
+          \State sys.exit()
+        \EndIf
+        \If {$color[v]$ == white}
+          \State $pi$[$v$] = $u$
+          \State DFSVisit($v$)
+        \EndIf
+      \EndFor
+
+      \State color[$u$] = black
+      \State $time$++
+      \State f[$u$] = time
+    \EndFunction
+    \end{algorithmic}
+
+
+    {\bf Time Complexity:}
+    If the algorithm discovers that the graph is acyclic (no back edges), there are at most $|V| - 1$ edges.
+    Together with DFS' time complexity of $O(|V| + |E|)$, this algorithm's time complexity is $O(V)$. 
+
+    If the algorithm discovers that the graph is cyclic, it has found a back edge. The algorithm stops before 
+    checking at most $|V|$ edges and vertices. Therefore, in this case, the algorithm's time commplexity is also $O(V)$. 
+
+    %&=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& =
+    % Question 8 
+    %&=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& =
+    \pagebreak
+    \par
+    \bigskip
+
+    \item
+      8 here.
+
+    %&=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& =
+    % Question 9 
+    %&=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& =
+    \par
+    \bigskip
+
+    \item
+      ** Question for Prof: Justify answer => more than a counterexample??
+
+      No. Consider the following counterexample:
+
+      \begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=3cm,
+        thick,main node/.style={circle,fill=blue!20,draw,font=\sffamily\Large\bfseries}]
+
+        \node[main node] (1) {a};
+        \node[main node] (2) [below left of=1] {u};
+        \node[main node] (4) [below right of=1] {v};
+
+        \path[every node/.style={font=\sffamily\small}]
+        (1) edge node [left] {} (4)
+        edge [bend right] node[left] {} (2)
+        (2) edge node [right] {} (1);
+      \end{tikzpicture}
+
+      By the definition of strongly connected component, because $a$ and $u$ are mutually reachable,
+      $\{a,u\}$ are strongly connected components. $\{v\}$ is a strongly connected component because $v$
+      is mutually reachable to itself. 
+
+      Assuming $u$ comes before $v$ in $adj[a]$, the following table lists the discovery and finish times:
+
+      \begin{center}
+        \begin{tabular}{ l | c | r }
+          \hline
+            & $d$ & $f$ \\ \hline
+          $a$ & 1 & 6 \\
+          $v$ & 4 & 5 \\
+          $u$ & 2 & 3 \\
+          \hline  
+        \end{tabular}
+      \end{center}
+
+      Thus, the vertices listed in order of $increasing$ finish times is: $\{u, v, a\}$.
+
+      However, calling a second depth-first search scanning vertices in the order $\{u, v, a\}$ colors
+      all vertices black in a single loop despite the fact that $\{u, v, a\}$ is not a SCC. 
+      In other words, DFS never starts from vertex $v$ because all vertices are colored black after DFS starts from the $u$ vertex. 
+      Thus, Professor Bacon's claim would wrongly classify $\{u, v, a\}$ a SCC.
+
+      Hence, the conjecture is disproved with this counterexample.
+
+    %&=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& =
+    % Question 10 
+    %&=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& =
+    \par
+    \bigskip
+
+    \item
+        Assume $f(n) = n^k$ for some constant $k$ and $f(n) = \Omega(n^{\log_b a + \epsilon})$ for some constant $\epsilon > 0$.
+
+        For $f(n)$ to hold in both cases, then it must be the case that $k > \log _{b} a$. Otherwise, if $k < \log _{b} a$ and
+        $f(n) = n^k$, then by definition, $f(n) \neq \Omega(n^{\log_b a + \epsilon})$.
+
+        $$ k > log_b a$$
+        $$ b^k > b^{log_b a} $$
+        $$ b^k > a $$
+        $$ 1 > \frac{a}{b^k} $$
+
+        Let $c = \frac{a}{b^k}$ because $k, a, b$ are constants.  Thus, plugging in,
+
+        $$ c < 1 $$
+
+        Finally, plugging in $c$ to $c \cdot f(n)$:
+
+        $c \cdot f(n) = \frac{a}{b^k} \cdot n^k$
+
+        $             = a \cdot (\frac{n}{b})^k$
+
+        $             = a \cdot f(\frac{n}{b})$
+        because of the given $f(n) = n^k$.
+
+        Hence, the regularity condition holds. 
+
+    %&=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& =
+    % Question 11 
+    %&=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& =
+    \par
+    \bigskip
+
+    \item
+      % a)
+
+      a) $a = 16, b = 4, f(n) = n^2$. $n^{\log_b a} = n^{\log_4 16} = n^2$. 
+
+      Because $f(n) = \Theta(n^{\log_4 16})$, Case (2) (from CLRS) of the Master Method holds. 
+
+      Hence, $T(n) = \Theta(n^2 \log n)$. 
+
+
+      \bigskip
+      % b)
+
+      b) $a = 7, b = 3, f(n) = n^2$. $n^{\log_b a} = n^{\log_3 7}$. 
+
+      Thus, $f(n) = \Omega(n^{\log_3 7 + \epsilon})$ for some constant $\epsilon>0$ holds because of:
+      $\log_3 7 \approx 1.77$. For instance, consider $\epsilon=0.1$.
+
+      From the proof in \#10, because $f(n) = \Omega(n^{\log_3 7 + \epsilon})$ and $f(n) = n^k$ where $k=2$,
+      the regularity condition must hold. For example, consider when $c = 7/9$. 
+      
+      Then,
+      
+      $$7 \cdot f(n/3) = 7/9 \cdot f(n)$$.
+      $$\frac{7 n^2}{9}= \frac{7 n^2}{9}$$ 
+
+      Hence, Case 3 (from CLRS) of the Master Method applies and $T(n) = \Theta(f(n)) = \Theta(n^2)$.
 
 
 
 
 
+      
 
 
   \end{enumerate}

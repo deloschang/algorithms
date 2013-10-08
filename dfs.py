@@ -17,7 +17,7 @@ graph = {'S': ['G', 'T', 'B'],
              'B': ['T', 'H'],
              'G': ['F', 'T'],
              'T': [],
-             'F': ['S'],
+             'F': ['S','T'],
              'C': ['B', 'H', 'D'],
              'H': ['T'],
              'D': ['T']}
@@ -56,7 +56,7 @@ def DFSVisit(u):
     glob_time += 1
     d[u] = glob_time
 
-    for v in graph2[u]:
+    for v in graph[u]:
         print "Exploring vertices adjacent to " + str(v)
 
         # Discovery of vertex
@@ -65,7 +65,7 @@ def DFSVisit(u):
 
             # Each time DFS discovers a new vertex, if it is T, set its count to 1. Otherwise, set it to 0.
             # If the vertex discovered is T, set it to "finished" and do not continue DFS from t
-            if v == "V":
+            if v == "T":
                 count[v] = 1
                 color[v] = "black"
             else:
@@ -125,11 +125,11 @@ def print_edges(graph):
 # Solution for 22.4-2
 # returns the count from s to t
 def calc_count():
-    print count['P']
+    print count['S']
 
 
-DFS(graph2)
-create_edges(graph2)
+DFS(graph)
+create_edges(graph)
 print "=========== Done ============"
 #print_edges(graph)
 
