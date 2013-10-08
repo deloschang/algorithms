@@ -21,6 +21,7 @@
     % Question 1 
     %&=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& =
     \item
+      11345
       **In a tree, for any two nodes $a$ and $b$, a unique path exists from $a$ to $b$.
 
       - Run BFS from any arbitrary node $u$ in the graph $T=(V,E)$. Mark the node $v$ with the highest discovery time in the BFS, 
@@ -28,6 +29,8 @@
 
       - Run BFS starting from node $v$. Mark the node $v_2$ with the highest discovery time in the BFS i.e. the node that is discovered last. 
       $\delta(v,v_2)$ is the diameter of the tree $T$. 
+
+      Claim: d(u,x) >= d(x,y)  or  d(u,y) >= d(x,y), then done
 
 
 
@@ -349,6 +352,7 @@
     \bigskip
 
     \item
+      *
       An undirected graph $G = (V,E)$ does not contain a cycle iff a DFS generates no back edges. Furthermore, an undirected
       graph $G$ has only tree edges and back edges. Therefore, two cases will exist:
 
@@ -356,6 +360,7 @@
 
         - If undirected graph $G$ has no back edges, it only has tree edges and therefore, is acyclic.
 
+      *
       Thus, the algorithm will run a modified DFS that checks if an edge $(u,v)$ leads to a gray vertex $v$ and not 
       $u$'s parent (because the graph is undirected) in the depth-first forest. 
 
@@ -388,11 +393,16 @@
 
 
     {\bf Time Complexity:}
-    If the algorithm discovers that the graph is acyclic (no back edges), there are at most $|V| - 1$ edges.
-    Together with DFS' time complexity of $O(|V| + |E|)$, this algorithm's time complexity is $O(V)$. 
+    Case 1: If the algorithm discovers that the graph is acyclic (no back edges), there are at most $|V| - 1$ edges.
+    Together with DFS' time complexity of $\Theta(|V| + |E|)$, this case's time complexity is $\Theta(V)$. 
 
-    If the algorithm discovers that the graph is cyclic, it has found a back edge. The algorithm stops before 
-    checking at most $|V|$ edges and vertices. Therefore, in this case, the algorithm's time commplexity is also $O(V)$. 
+    Case 2: If the algorithm discovers that the graph is cyclic, it has found a back edge. The algorithm stops before 
+    checking at most $|V|$ edges. 
+    Together with DFS' time complexity of $\Theta(|V| + |E|)$, this case's time complexity is $O(V)$. 
+
+    Therefore, the algorithm's time complexity is $O(V)$ because $O$ in Case 2 is less strict than $\Theta$ in Case 1. 
+
+    -----
 
     %&=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& =
     % Question 8 
@@ -550,77 +560,110 @@
     \item
       % a)
 
-      a) Because it takes $(n-1)/2$ times for $n$ to become 1 and $f(n) = n^2$, we guess the solution as $\Theta(n^3)$.
+      a) Because $T(n-2)$, it would take $\frac{n}{2}$ levels for $n$ to become some constant like 1 in the recurrence tree. 
+      It follows that there will be $\frac{n}{2}$ terms in the recurrence tree (which would be a vertical line of terms). 
 
-      Claim: $O(n^3)$
+      Because $f(n) = n^2$, each level on the recurrence tree would be $(n)^2, (n-2)^2, (n-4)^2\dots)$ with $\frac{n}{2}$ such terms.
+      Note that each level's value is at most $n^2$. 
 
-      $T(n) = T(n-2) + n^2$
+      Thus, $\frac{n}{2}$ number of levels have at most $n^2$ value at each level. 
+      The sum of all the terms on all the levels will be at most:
 
-      $T(n) \leq c(n-2)^3 + n^2$
+      $$\frac{n}{2} \cdot n^2 = 0.5 \cdot n^3$$
 
-      % b)
+      Hence, we guess the upper bound is $T(n) = O(n^3)$. 
 
-      b) 
-      \begin{tikzpicture}[level/.style={sibling distance=40mm/#1}]
-        \node (z){$n$}
-          child {node (a) {$\frac{n}{3}$}
-            child {node  (b) {$\frac{n}{4}$}
-              child {node (b1) {$\vdots$}
-              }
-              child {node (b1) {$\vdots$}
-              }
-              child {node (b2) {$\vdots$}
-              }
-            }
-            child {node (g) {$\frac{n}{8}$}
-              child {node (g1) {$\vdots$}
-              }
-              child {node (g1) {$\vdots$}
-              }
-              child {node (g2) {$\vdots$}
-              }
-            }
-            child {node  (h) {$\frac{n}{16}$}
-              child {node (h1) {$\vdots$}
-              }
-              child {node (h2) {$\vdots$}
-              }
-            }
-          }
-          child {node (d) {$\frac{n}{4}$}
-            child {node  (e) {$\frac{n}{9}$}
-              child {node (e1) {$\vdots$}
-              }
-              child {node (e2) {$\vdots$}
-              }
-            }
-            child {node (f) {$\frac{n}{9}$}
-              child {node (f1) {$\vdots$}
-              }
-              child {node (f2) {$\vdots$}
-              }
-            }
-          }
-          child {node  (j) {$\frac{n}{8}$}
-            child {node (k) {$\frac{n}{9}$}
-              child {node {$\vdots$}
-              }
-              child {node {$\vdots$}
-              }
-            }
-            child {node (l) {$\frac{n}{9}$}
-            child {node {$\vdots$}
-            }
-            child {node (c){$\vdots$}
-            }
-          }
-        };
-        \end{tikzpicture}
+      Consider the halfway point of the recurrence tree. The value at the halfway point will be $(\frac{n}{2})^2$. There will be
+      $\frac{n}{4}$ terms from the top of the recurrence tree to this halfway point. Furthermore, each level from the top of the
+      recurrence tree to the halfway point of the recurrence tree holds a value of {\bf at least} $(\frac{n}{2})^2$.
 
+      Therefore, the sum of the first half of the recurrence tree will be at least: $(\frac{n}{2})^2 \cdot \frac{n}{4} = \frac{n^{3}}{16}$.
+
+      Hence, we guess the lower bound is $T(n) = \Omega(n^3)$.
+
+      Given our guesses $T(n) = O(n^3)$ and $T(n) = \Omega(n^3)$, by definition, we guess $T(n) = \Theta(n^3)$.
+      However, this is only a guess because we do not account for the cost of all the leaves. 
+    
+
+  
+      Next, we prove our solution correct by the substitution method:
+
+      Guess: $T(n) = \Theta(n^3)$.
+
+      Claim 1: $T(n) = O(n^3)$ i.e. $T(n) \leq c \cdot n^3$ for some constant $c>0$.
+
+      Claim 2: $T(n) = \Omega(n^3)$ i.e. $T(n) \geq c \cdot n^3$ for some constant $c>0$.
+
+      Given: $T(n) = T(n-2) + n^2$
+
+      Inductive Hypothesis: Assume $T(n) \leq cn^3$ at all values less than n (i.e. $n-2$, $n-4$ etc.) for some constant $c>0$.
+      \begin{align}
+        T(n) &= T(n-2) + n^2  \\
+        &\leq c(n-2)^3 + n^2  \text{         (by IH)}\\
+        &= c(n^2 - 4n + 4)(n-2) + n^2 \\
+        &= c(n^3 - 2n^2 - 4n^2 + 8n + 4n - 8) + n^2 \\
+        &= c(n^3 - 6n^2 + 12n - 8) + n^2  \\
+        &= cn^3 - 6cn^2 + 12cn - 8c + n^2  \\
+        &= cn^3 + n(-6cn + 12c + n) - 8c   
+      \end{align}
+
+      Consider when the term $(-6cn + 12c + n)$ is negative. Then
+      $cn^3 + n(-6cn + 12c + n) - 8c \leq cn^3$.
+
+      For example, consider when $c=3$ and $n = 3$. Then:
+      \begin{align}
+        3(3)^3 + 3(-54 + 36 + 3) - 24 &\leq 3(3)^3
+      \end{align}
+
+      More generally, the term $(-6cn + 12c +n)$ is negative when 
+      $c=3$ and $n \geq 3$. Thus, the induction step is shown for 
+      $c=3$ and $n \geq 3$.
+
+      Next, we show the base cases where 
+      $cn^3 + n(-6cn + 12c + n) - 8c \leq n^3$ when $n=1$ and $n=2$.
+
+      Suppose $c=1$ and $n=1$. Then $n(-6cn + 12c + n) - 8c$ is negative and 
+      $cn^3 + n(-6cn + 12c + n) - 8c \leq cn^3$ holds. Thus, the base case
+      is shown for $c=1$ and $n=1$.
+
+      Suppose $c=1$ and $n=2$. Again, $n(-6cn + 12c + n) - 8c$ is negative and 
+      $cn^3 + n(-6cn + 12c + n) - 8c \leq cn^3$ holds. Thus, the base case
+      is shown for $c=1$ and $n=2$.
+
+      Hence we have Claim 1 for all $n \geq 1$.
       
 
+      To prove Claim 2, 
+
+      % b)
+      b) 
+      24:30
+
+a---
+
+t(n) <= t{n-2} + n^2
+    <=  c(n-2)^3 + n^2
+    <= cn^3
+    c=3
 
 
+b---
+
+
+n x 1(7/8+7/8^2) to inf
+a + ar + ar^2 + \dots + ar^n-1
+a(1-r^n) / 1 - r
+
+a / 1 - r   \cdot   1 / (7/8)  = 8
+
+
+a=1
+r=7/8, as approach inf, max eight n
+
+n < 8n
+
+induction
+c>=8
 
 
 
