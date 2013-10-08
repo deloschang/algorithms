@@ -616,11 +616,13 @@
       \end{align}
 
       More generally, the term $(-6cn + 12c +n)$ is negative when 
-      $c=3$ and $n \geq 3$. Thus, the induction step is shown for 
       $c=3$ and $n \geq 3$.
 
-      Next, we show the base cases where 
-      $cn^3 + n(-6cn + 12c + n) - 8c \leq n^3$ when $n=1$ and $n=2$.
+      Furthermore, the term $(-6cn + 12c +n)$ is negative when  
+      any $c>\frac{1}{6}$ and all $n \geq \frac{12c}{6c-1}$. 
+
+      We show the base cases where 
+      $cn^3 + n(-6cn + 12c + n) - 8c \leq cn^3$ when $n=1$ and $n=2$.
 
       Suppose $c=1$ and $n=1$. Then $n(-6cn + 12c + n) - 8c$ is negative and 
       $cn^3 + n(-6cn + 12c + n) - 8c \leq cn^3$ holds. Thus, the base case
@@ -630,44 +632,60 @@
       $cn^3 + n(-6cn + 12c + n) - 8c \leq cn^3$ holds. Thus, the base case
       is shown for $c=1$ and $n=2$.
 
+      Thus, we have the induction step.
+
       Hence we have Claim 1 for all $n \geq 1$.
       
 
       To prove Claim 2, 
+      Inductive Hypothesis: Assume $T(n) \geq cn^3$ at all values less than n (i.e. $n-2$, $n-4$ etc.) for some constant $c>0$.
+      \begin{align}
+        T(n) &= T(n-2) + n^2  \\
+        &\geq c(n-2)^3 + n^2  \text{         (by IH)}\\
+        &= c(n^2 - 4n + 4)(n-2) + n^2 \\
+        &= c(n^3 - 2n^2 - 4n^2 + 8n + 4n - 8) + n^2 \\
+        &= c(n^3 - 6n^2 + 12n - 8) + n^2  \\
+        &= cn^3 - 6cn^2 + 12cn - 8c + n^2  \\
+        &= cn^3 + n(-6cn + 12c + n) - 8c   
+      \end{align}
+      If $n(-6cn + 12c + n) - 8c \geq 0$, then $cn^3 + n(-6cn + 12c + n) - 8c \geq cn^3$.
+
+      Consider when $c=\frac{1}{6}$ and all $n\geq\frac{2}{3}$. Then, $n(-6cn + 12c + n) - 8c \geq 0$.
+      And thus $T(n) \geq cn^3$ when $c=\frac{1}{6}$ and all $n\geq\frac{2}{3}$.
+
+      Hence, we have the induction step.
+
+      Because $T(n) = O(n^3)$ and $T(n) = \Omega(n^3)$, it follows that $T(n) = \Theta(n^3)$.
 
       % b)
-      b) 
-      24:30
+      \bigskip
+      b)
+      In the recurrence tree, the top level's value is $n$. The second level's value is $\frac{7}{8}n$.
+      The third level's value is $(\frac{7}{8})^2n$ and so on.
 
-a---
+      The sum of all such terms is a geometric series in the form of 
 
-t(n) <= t{n-2} + n^2
-    <=  c(n-2)^3 + n^2
-    <= cn^3
-    c=3
+      $$n(a + ar + ar^2 + \dots) \text{ where } a=1 \text{ and } r=\frac{7}{8}$$
 
+      and the series ends at some term.
 
-b---
+      Thus, because the geometric series ends at some definite term ($\log n$ term), the sum must be less than the same geometric series (where 
+      where $a=1$ and $r=\frac{7}{8}$) that is {\bf infinite}.
 
+      Because $r < 1$, the sum of an infinite geometric series is $\frac{a}{1-r} = 8$.
 
-n x 1(7/8+7/8^2) to inf
-a + ar + ar^2 + \dots + ar^n-1
-a(1-r^n) / 1 - r
+      Thus, the sum of all levels of the recurrence tree must be $\leq 8n$. 
 
-a / 1 - r   \cdot   1 / (7/8)  = 8
+      Furthermore, the sum of all levels must be $\geq n$ because $n$ is the recurrence tree's first level value. 
 
-
-a=1
-r=7/8, as approach inf, max eight n
-
-n < 8n
-
-induction
-c>=8
+      Given these upper and lower bounds, our guess is $\Theta(n)$.
 
 
 
 
+
+$induction
+c>=8$
 
 
       
