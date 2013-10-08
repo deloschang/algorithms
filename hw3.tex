@@ -489,13 +489,17 @@
     %&=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& =
     % Question 11 
     %&=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& =
+    \pagebreak
     \par
     \bigskip
 
     \item
       % a)
 
-      a) $a = 16, b = 4, f(n) = n^2$. $n^{\log_b a} = n^{\log_4 16} = n^2$. 
+      a) 
+      $T(n)$ is in the form of $T(n) = a \cdot T(\frac{n}{b}) + f(n)$.
+
+      $a = 16, b = 4, f(n) = n^2$. $n^{\log_b a} = n^{\log_4 16} = n^2$. 
 
       Because $f(n) = \Theta(n^{\log_4 16})$, Case (2) (from CLRS) of the Master Method holds. 
 
@@ -505,20 +509,53 @@
       \bigskip
       % b)
 
-      b) $a = 7, b = 3, f(n) = n^2$. $n^{\log_b a} = n^{\log_3 7}$. 
+      b) 
+      $T(n)$ is in the form of $T(n) = a \cdot T(\frac{n}{b}) + f(n)$.
 
-      Thus, $f(n) = \Omega(n^{\log_3 7 + \epsilon})$ for some constant $\epsilon>0$ holds because of:
-      $\log_3 7 \approx 1.77$. For instance, consider $\epsilon=0.1$.
+      $a = 7, b = 3, f(n) = n^2$. $n^{\log_b a} = n^{\log_3 7}$. 
+
+      Thus, $f(n) = \Omega(n^{\log_3 7 + \epsilon})$ when $\epsilon=0.1$ holds because of the fact that
+      $\log_3 7 \approx 1.77$. Hence, $f(n) = \Omega(n^{\log_3 7 + \epsilon})$ for some constant $\epsilon>0$ holds.
 
       From the proof in \#10, because $f(n) = \Omega(n^{\log_3 7 + \epsilon})$ and $f(n) = n^k$ where $k=2$,
-      the regularity condition must hold. For example, consider when $c = 7/9$. 
+      the regularity condition must hold. For example, consider when $c = 7/9$. Note that $c < 1$ which satisfies part of the
+      regularity condition. 
       
       Then,
       
       $$7 \cdot f(n/3) = 7/9 \cdot f(n)$$.
       $$\frac{7 n^2}{9}= \frac{7 n^2}{9}$$ 
 
-      Hence, Case 3 (from CLRS) of the Master Method applies and $T(n) = \Theta(f(n)) = \Theta(n^2)$.
+      Hence, because the regularity condition holds and because $f(n) = \Omega(n^{\log_3 7 + \epsilon})$ for some constant $\epsilon>0$ holds,
+      Case 3 (from CLRS) of the Master Method applies and $T(n) = \Theta(f(n)) = \Theta(n^2)$.
+
+      % c)
+
+      \bigskip
+      c) 
+      $T(n)$ is in the form of $T(n) = a \cdot T(\frac{n}{b}) + f(n)$.
+      
+      $a = 2, b = 4, f(n) = \sqrt{n}$. $n^{\log_b a} = n^{\log_4 2} = \sqrt{n}$. 
+
+      Because $f(n) = \Theta(n^{\log_4 16})$, $f(n) = \Theta(\sqrt{n})$, Case (2) (from CLRS) of the Master Method holds. 
+
+      Hence, $T(n) = \Theta(\sqrt{n} \log n)$. 
+
+    %&=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& =
+    % Question 12 
+    %&=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& =
+    \par
+    \bigskip
+
+    \item
+      % a)
+
+      a) $a = 16, b = 4, f(n) = n^2$. $n^{\log_b a} = n^{\log_4 16} = n^2$. 
+      
+
+
+
+
 
 
 
