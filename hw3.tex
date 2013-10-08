@@ -550,7 +550,73 @@
     \item
       % a)
 
-      a) $a = 16, b = 4, f(n) = n^2$. $n^{\log_b a} = n^{\log_4 16} = n^2$. 
+      a) Because it takes $(n-1)/2$ times for $n$ to become 1 and $f(n) = n^2$, we guess the solution as $\Theta(n^3)$.
+
+      Claim: $O(n^3)$
+
+      $T(n) = T(n-2) + n^2$
+
+      $T(n) \leq c(n-2)^3 + n^2$
+
+      % b)
+
+      b) 
+      \begin{tikzpicture}[level/.style={sibling distance=40mm/#1}]
+        \node (z){$n$}
+          child {node (a) {$\frac{n}{3}$}
+            child {node  (b) {$\frac{n}{4}$}
+              child {node (b1) {$\vdots$}
+              }
+              child {node (b1) {$\vdots$}
+              }
+              child {node (b2) {$\vdots$}
+              }
+            }
+            child {node (g) {$\frac{n}{8}$}
+              child {node (g1) {$\vdots$}
+              }
+              child {node (g1) {$\vdots$}
+              }
+              child {node (g2) {$\vdots$}
+              }
+            }
+            child {node  (h) {$\frac{n}{16}$}
+              child {node (h1) {$\vdots$}
+              }
+              child {node (h2) {$\vdots$}
+              }
+            }
+          }
+          child {node (d) {$\frac{n}{4}$}
+            child {node  (e) {$\frac{n}{9}$}
+              child {node (e1) {$\vdots$}
+              }
+              child {node (e2) {$\vdots$}
+              }
+            }
+            child {node (f) {$\frac{n}{9}$}
+              child {node (f1) {$\vdots$}
+              }
+              child {node (f2) {$\vdots$}
+              }
+            }
+          }
+          child {node  (j) {$\frac{n}{8}$}
+            child {node (k) {$\frac{n}{9}$}
+              child {node {$\vdots$}
+              }
+              child {node {$\vdots$}
+              }
+            }
+            child {node (l) {$\frac{n}{9}$}
+            child {node {$\vdots$}
+            }
+            child {node (c){$\vdots$}
+            }
+          }
+        };
+        \end{tikzpicture}
+
       
 
 
