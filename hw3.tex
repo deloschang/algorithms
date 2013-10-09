@@ -425,7 +425,6 @@
     \bigskip
 
     \item
-      *
       An undirected graph $G = (V,E)$ does not contain a cycle iff a DFS generates no back edges. Furthermore, an undirected
       graph $G$ has only tree edges and back edges. Therefore, two cases will exist:
 
@@ -433,8 +432,9 @@
 
         - If undirected graph $G$ has no back edges, it only has tree edges and therefore, is acyclic.
 
-      *
-      Thus, the algorithm will run a modified DFS that checks if an edge $(u,v)$ leads to a gray vertex $v$ and not 
+      Thus, we run a modified version of DFS where we look for back edges. If there is a back edge, a cycle exists.
+
+      To do this, the algorithm will run a modified DFS that checks if an edge $(u,v)$ leads to a gray vertex $v$ and not 
       $u$'s parent (because the graph is undirected) in the depth-first forest. 
 
     {\bf Pseudocode:}
@@ -896,64 +896,6 @@
 
 
   \end{enumerate}
-      Let $T_{s}$ denote a tree rooted in the vertex $s$. Note that between any two vertices in tree $T$, there exists
-      a unique simple path between them. As such, all references to paths are unique simple paths.
-
-      For every node $v$ in the tree $T$ with children nodes $u_{0}, u_{1}, u_{2} \dots u_{k}$, 
-      the diameter of $T_{v}$ will be the max between the following:
-
-      1.the diameter of one of $v$'s subtrees $T_{u_{0}} \dots T_{u_{k}}$.
-
-      2.the longest path between two leaves from two distinct $v$ subtrees $T_{u_{0}} \dots T_{u_{k}}$, 
-      passing through and connected by $v$.
-
-      In Case 2, the longest path can be calculated by adding the heights of the two subtrees together. 
-
-      Hence, using the above two cases, we can recursively calculate the diameter of each tree bottom-up. 
-
-      {\bf Time Complexity}
-      O(V)
-
-
-      {\bf Pseudocode}
-      - The following psuedocode will store the height of the tree using a pointer. This reduces the 
-      time complexity of the algorithm by computing the height of a subtree in the same recursion.
-      
-      - $height$ should be called initially with 0.
-
-
-      \begin{algorithmic}[1]
-      \Function{calcDiameter}{tree, *height}
-      \Comment Set the height of every subtree to 0
-      \ForAll{$u \in V$}
-        \State $h[u] = 0$
-      \EndFor
-
-
-      \ForAll{$u \in V$}
-        \If {color[$u$] == white}
-          \State DFSVisit($u$)
-        \EndIf
-      \EndFor
-
-      \Comment Changes made here to list and classify edges
-      \ForAll{$(u,v) \in E$}
-        \If {$\pi$[$v$] == $u$}
-          \State print Tree Edge: ($u$,$v$)
-        \Else 
-          \Comment Parenthesis theorem to determine ancestry
-          \If {d[$u$] $<$ d[$v$] $<$ f[$v$] $<$ f[$u$]}
-            \State print Forward Edge: ($u$,$v$)
-          \ElsIf {d[$v$] $<$ d[$u$] $<$ f[$u$] $<$ f[$v$]}
-            \State print Back Edge: ($u$,$v$)
-          \Else
-            \State print Cross Edge: ($u$,$v$)
-          \EndIf
-        \EndIf
-      \EndFor
-
-    \EndFunction
-    \end{algorithmic}
 \end{document}
 
 
