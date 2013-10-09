@@ -41,6 +41,17 @@
 
       Claim: $\delta(u,x) \geq \delta(x,y)$ or $\delta(u,y) \geq \delta(x,y)$
 
+      
+      Let $t$ be the first node on the path from $x$ to $y$ discovered by BFS.
+
+      If the paths $p_{1}$ and $p_{2}$ do share edges, then $t$ is on $p_{1}$. Since $u$ was the last node 
+      found by BFS, $\delta(t,u) \geq \delta(t,x)$. Since $p_{2}$ is the longest path, $\delta(t,x) \geq \delta(t, u).$
+      Thus, $\delta(t, x) = \delta(t, u)$ and $\delta(u, y) = \delta(x,y)$.
+
+
+      $\delta(x,y) \geq \delta(u, v)$ and $\delta(u, v) \geq \delta(u, y)$ so all three are equal. Thus $\delta(u, v)$
+      is the diameter of the tree.
+
 
 
 
