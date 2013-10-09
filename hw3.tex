@@ -22,7 +22,7 @@
     %&=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& =
     \item
       11345
-      **In a tree, for any two nodes $a$ and $b$, a unique path exists from $a$ to $b$.
+      In a tree, for any two nodes $a$ and $b$, a unique path exists from $a$ to $b$.
 
       - Run BFS from any arbitrary node $u$ in the graph $T=(V,E)$. Mark the node $v$ with the highest discovery time in the BFS, 
       i.e. the node that is discovered last. $v$ must be a leaf node. 
@@ -30,7 +30,29 @@
       - Run BFS starting from node $v$. Mark the node $v_2$ with the highest discovery time in the BFS i.e. the node that is discovered last. 
       $\delta(v,v_2)$ is the diameter of the tree $T$. 
 
-      Claim: d(u,x) >= d(x,y)  or  d(u,y) >= d(x,y), then done
+      *** insert algorithm here ***
+
+      {\bf Correctness}
+      Let $\delta(u,v)$ denote the shortest-path distance between vertex $u$ and vertex $v$.
+
+      Let $(x,y) \in V$ be such that $\delta(x,y)$ is the diameter of tree $G$.
+
+      Let $u$ be the furthest vertex from the source vertex of the first BFS. Then, 
+
+      Claim: $\delta(u,x) \geq \delta(x,y)$ or $\delta(u,y) \geq \delta(x,y)$
+
+
+
+
+      Let $G$ be the original tree. Suppose $x$ and $y$ are nodes in $G$. 
+
+      maxlength ← 0
+for s ← 0 to s < |V[T]|
+      do temp ← BSF(T, S)
+            if maxlength < temp
+                   maxlength ← temp
+                   increment s by 1
+return maxlength
 
 
 
@@ -56,7 +78,7 @@
       \end{tikzpicture}
 
       Consider a DFS run on the above counterexample directed graph $G$ starting from $a$.  
-      There is clearly a path from $u$ to $v$ through $a$ (u-a-v).
+      There is clearly a path from $u$ to $v$ through $a$ (u $\rightarrow$ a $\rightarrow$ v).
 
       \begin{center}
         \begin{tabular}{ l | c | r }
@@ -97,7 +119,7 @@
       \end{tikzpicture}
 
       Consider a DFS run on the above counterexample directed graph $G$ starting from $a$.  
-      There is clearly a path from $u$ to $v$ through $a$ (u-a-v).
+      There is clearly a path from $u$ to $v$ through $a$ (u $\rightarrow$ a $\rightarrow$ v).
 
       \begin{center}
         \begin{tabular}{ l | c | r }
@@ -170,9 +192,11 @@
       - We use the parenthesis theorem to check if $u$ is a descendant of $v$. 
 
       - In a DFS of an undirected graph $G$, every edge of $G$ is either a tree edge or a back edge, which simplifies
-      our classification. In the pseudocode, we would remove the $if$ statement checks for a forward edge and cross edge.
+      our classification. In the pseudocode, we would remove the $if$ statement checks for a forward edge and cross edge, i.e.
+      modify lines (16) and (20) because the control flow would never reach those parts of the if statement in an undirected
+      graph $G$.
 
-    \begin{algorithmic}
+      \begin{algorithmic}[1]
       \Function{DFS}{$G(V,E)$}
       \ForAll{$u \in V$}
         \State color[$u$] = white
@@ -247,7 +271,7 @@
 
       - When DFS completes, print $count[s]$ where $s$ is the source vertex.
 
-    \begin{algorithmic}
+      \begin{algorithmic}[1]
       \Function{DFS}{$G(V,E)$, $s$: source vertex, $t$: target vertex}
 
       \Comment Added input parameters
@@ -273,7 +297,7 @@
     \EndFunction
     \end{algorithmic}
 
-    \begin{algorithmic}
+    \begin{algorithmic}[1]
       \Function{DFSVisit}{$u$, $s$, $t$}
       \State color[$u$] = gray
       \State $time$++
@@ -368,7 +392,7 @@
 
     The main $DFS(G)$ function is left unchanged.
 
-    \begin{algorithmic}
+    \begin{algorithmic}[1]
       \Function{DFSVisit}{$u$}
       \State color[$u$] = gray
       \State $time$++
@@ -411,8 +435,113 @@
     \par
     \bigskip
 
+    Pseudocode for Topological Sort:
+
     \item
-      8 here.
+      \begin{algorithmic}[1]
+        \Function{TopSort}{$G=(V,E)$}
+        \ForAll{$v \in V$}
+          \State $inDegree[v]=0$
+        \EndFor
+
+        \ForAll{$u \in V$}
+          \ForAll{$v \in Adj[u]$}
+            \State $inDegree[v]+=1$
+          \EndFor
+        \EndFor
+
+        \State Initialize queue Q
+        \ForAll{$v \in V$}
+          \If {inDegree[v] == 0}
+            \State enqueue($Q,v$)
+          \EndIf
+        \EndFor
+
+
+        \While{$Q$ is not empty}
+          \State $u =$ dequeue(Q)
+          \State print $u$
+
+          \ForAll{$v \in Adj[u]$}
+            \State $inDegree[v] -= 1$
+            \If {inDegree[v] == 0}
+              \State enqueue($Q,v$)
+            \EndIf
+          \EndFor
+        \EndWhile
+
+        \ForAll{$u \in V$}
+        \If {$inDegree[u] \neq 0$}
+            \State print ``cycle exists''
+          \EndIf
+        \EndFor
+      \EndFunction
+      \end{algorithmic}
+
+      {\bf Time Complexity}
+      - In the for loop at (2), we initialize the in-degree of each vertex to 0, taking $\Theta(V)$ time. 
+
+      - In the for loop at (5), we calculate vertices' in-degrees by scanning the adjacency lists of all the vertices and
+      adding 1 to the in-degree of each vertex an edge enters. The time complexity is $\Theta(V+E)$ because we visit
+      $|V|$ vertices and $|E|$ edges.
+
+      - Initializing the queue at (10) takes $\Theta(1)$
+
+      - We only consider vertices with an in-degree of 0 and enqueueing takes $\Theta(1)$ time. Therefore, this for loop takes
+      $\Theta(V)$.
+
+      - In (16), we continuously process vertices of an in-degree of 0. We ``remove'' it by decrementing all adjacent vertices'
+      in-degree count by 1. Then enqueue any vertices with in-degree 0 to continue the topological sort. Each enqueue takes
+      $\Theta(1)$ time. 
+
+      - The entire while loop takes $\Theta(V+E)$ 
+      
+        - Each vertex is enqueued and dequeued at most once because it is ``removed'' after decrementing adjacent vertice degrees.
+      Vertices are only enqueued if their original in-degree is 0 or if after decrementing, its in-degree goes to 0. Thus, 
+      it takes $O(V)$ time to process each vertex.
+
+        - Similarly, because the adjacency list for each vertex is checked at most once, the algorithm takes $O(E)$ time checking
+        the adjacency list for adjacent vertices. In total, $O(E)$ time complexity. 
+
+      - The for loop at line (26) takes $\Theta(V)$ time because it must check every vertex for a cycle.
+
+      Hence, the time complexity of this algorithm is $O(V+E)$.
+
+      {\bf Correctness}
+
+      The algorithm correctly topologically sorts graph $G=(V,E)$. 
+      
+      The correctness follows from the following observations:
+      
+      Due to the loop at line (5), for all arbitrary edges $(u,v)$ where $u$ enters $v$, $v$ will have an in-degree of at least 1. 
+      Furthermore, $v$ will not be outputted until its in-degree is decremented to 0 in line (20). $v$'s in-degree
+      will be 0 only if every edge $(u,v)$ entering $v$ is processed before $v$. Hence, the processing of $u$ will 
+      output $u$ and remove it. 
+
+      Thus for all arbitrary edges $(u,v)$, the algorithm will output $u$ before $v$, which when looped over all edges in $G$ will
+      yield a topological sort. 
+
+      {\bf Cycles}
+
+      If graph $G$ is cyclic, no vertices in cycles are output because cycle in-degrees never decrement to 0. 
+      
+      Proof by contradiction: Assume that vertices in cycles are outputted. 
+
+      Given the assumption, there must be a first vertex, $u$, in a cycle in $G$ to be outputted. 
+      When $u$ is output, $u$'s in-degree must be 0. 
+      Because $u$ is in a cycle, at the start of the algorithm, $u$'s in-degree must have been at least 1. Thus, for
+      $u$'s in-degree to be 0, it must have been decremented. Suppose $v$ is $u$'s preceding vertex in the cycle. 
+      For $u$'s in-degree to be decremented, $v$ must have been processed and outputted before $u$. 
+      This contradicts our original assumption that $u$ is the first vertex in the cycle to be outputted. 
+
+      Hence, no vertices in cycles are outputted.
+
+      Otherwise, if graph $G$ is acyclic, all vertices are outputted. 
+
+      
+
+
+
 
     %&=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& =
     % Question 9 
@@ -421,9 +550,7 @@
     \bigskip
 
     \item
-      ** Question for Prof: Justify answer => more than a counterexample??
-
-      No. Consider the following counterexample:
+      No, Prof. Bacon is wrong though he has a great name. Consider the following counterexample:
 
       \begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=3cm,
         thick,main node/.style={circle,fill=blue!20,draw,font=\sffamily\Large\bfseries}]
@@ -590,9 +717,9 @@
 
       Guess: $T(n) = \Theta(n^3)$.
 
-      Claim 1: $T(n) = O(n^3)$ i.e. $T(n) \leq c \cdot n^3$ for some constant $c>0$.
+      Claim 1: $T(n) = O(n^3)$ i.e. $T(n) \leq c \cdot n^3$ for some constant $c_{0}>0$.
 
-      Claim 2: $T(n) = \Omega(n^3)$ i.e. $T(n) \geq c \cdot n^3$ for some constant $c>0$.
+      Claim 2: $T(n) = \Omega(n^3)$ i.e. $T(n) \geq c \cdot n^3$ for some constant $c_{1}>0$.
 
       Given: $T(n) = T(n-2) + n^2$
 
@@ -653,7 +780,7 @@
       Consider when $c=\frac{1}{6}$ and all $n\geq\frac{2}{3}$. Then, $n(-6cn + 12c + n) - 8c \geq 0$.
       And thus $T(n) \geq cn^3$ when $c=\frac{1}{6}$ and all $n\geq\frac{2}{3}$.
 
-      Hence, we have the induction step.
+      Hence, we have the induction step and Claim 2.
 
       Because $T(n) = O(n^3)$ and $T(n) = \Omega(n^3)$, it follows that $T(n) = \Theta(n^3)$.
 
@@ -680,15 +807,43 @@
 
       Given these upper and lower bounds, our guess is $\Theta(n)$.
 
+      Next, we prove our solution correct by the substitution method:
 
+      Guess: $T(n) = \Theta(n)$.
 
+      Claim 1: $T(n) = O(n)$ i.e. $T(n) \leq c \cdot n$ for some constant $c_{0}>0$.
 
+      Claim 2: $T(n) = \Omega(n)$ i.e. $T(n) \geq c \cdot n$ for some constant $c_{1}>0$.
 
-$induction
-c>=8$
+      Induction hypothesis: $T(n) \leq cn$ for some constant $c>0$ at all values less than $n$ (i.e. $n/2$, $n/4$ etc.)
 
+      \begin{align}
+        T(n) &= T(n/2) + T(n/4) + T(n/8) + n \\
+        &\leq c(n/2)+ c(n/4) + c(n/8) + n\text{         (by IH)}\\
+        &= 7cn / 8 + n \\
+        &= n \cdot (1 + 7c/8) \\
+        &\leq cn \text{    if $c\geq8$}
+      \end{align}
 
-      
+      Thus, we have shown that $T(n) \leq cn$ for a $c>0$.
+
+      Hence, we have the induction step and Claim 1, $T(n) = O(n)$. 
+
+      To prove Claim 2, we start with:
+
+      \begin{align}
+        T(n) &= T(n/2) + T(n/4) + T(n/8) + n \\
+        &\geq n
+      \end{align}
+
+      From (21) to (22), we can drop the terms on the right-side to create the inequality. 
+
+      Thus, we have shown that $T(n) \geq cn$ for $c=1$.
+
+      Hence, we have Claim 2, $T(n) = \Omega(n)$.
+
+      Because $T(n) = O(n)$ and $T(n) = \Omega(n)$, it follows by definition that $\Theta(n)$.
+
 
 
   \end{enumerate}
