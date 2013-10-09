@@ -21,16 +21,54 @@
     % Question 1 
     %&=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& =
     \item
-      11345
-      In a tree, for any two nodes $a$ and $b$, a unique path exists from $a$ to $b$.
+      In a tree, for any two nodes $a$ and $b$, a unique simple path exists from $a$ to $b$. Therefore, let all references to paths
+      mean unique simple paths. 
 
-      - Run BFS from any arbitrary node $u$ in the graph $T=(V,E)$. Mark the node $v$ with the highest discovery time in the BFS, 
-      i.e. the node that is discovered last. $v$ must be a leaf node. 
+      - Run BFS from any arbitrary node $s$ in the tree $T=(V,E)$. Mark the last-discovered node $u$ in the BFS, 
+      $u$ must be a leaf node. 
 
-      - Run BFS starting from node $v$. Mark the node $v_2$ with the highest discovery time in the BFS i.e. the node that is discovered last. 
-      $\delta(v,v_2)$ is the diameter of the tree $T$. 
+      - Run BFS starting from node $u$. Mark the last-discovered node as $v$.
+      $\delta(u, v)$ is the diameter of the tree $T$. 
 
-      *** insert algorithm here ***
+      - In the pseudocode, start $main$ with parameters graph $G$ and an arbitrary source vertex.
+
+      \begin{algorithmic}[1]
+      \Function{main}{$G(V,E), s: source vertex$}
+      \State $u$ = BFS($G$, $s$)
+      \State $v$ = BFS($G$, $u$)
+
+      \Comment Return the diameter
+      \State return $\delta(u,v)$
+    \EndFunction
+
+    \end{algorithmic}
+      \begin{algorithmic}[1]
+      \Function{BFS}{$G(V,E), s:source vertex$}
+      \ForAll{$v \in V$}
+        \State d[$v$] = $\infty$
+      \EndFor
+      \State $d[s] = 0$
+
+      \State Initialize queue Q to contain element $s$
+      \While{$Q$ is not empty}
+        \State $u = dequeue(Q)$
+        \ForAll{$v \in Adj[u]$}
+          \If {$d[v] == \infty$}
+            \State $d[v] = 1 + d[u]$
+            \State enqueue($Q,v)$
+          \EndIf
+        \EndFor
+      \EndWhile
+      \Comment $u$ will be the last discovered node
+      \State return $u$
+
+    \EndFunction
+    \end{algorithmic}
+
+      {\bf Time Complexity }
+      BFS has a time complexity of $\Theta(V+E)$. Since it is run twice, the time complexity of this algorithm is still $\Theta(V+E)$ because 
+      marking the nodes $u$ and $v$ take $\Theta(1)$ time.
+
 
       {\bf Correctness}
       Let $\delta(u,v)$ denote the shortest-path distance between vertex $u$ and vertex $v$.
@@ -39,32 +77,32 @@
 
       Let $u$ be the furthest vertex from the source vertex of the first BFS. Then, 
 
-      Claim: $\delta(u,x) \geq \delta(x,y)$ or $\delta(u,y) \geq \delta(x,y)$
+      {\bf Claim}: $\delta(u,x) \geq \delta(x,y)$ or $\delta(u,y) \geq \delta(x,y)$
 
       
-      Let $t$ be the first node on the path from $x$ to $y$ discovered by BFS.
+      Let $w$ be the first node on the path from $x$ to $y$ discovered by the first BFS.
+      Because $w$ is on the path from $x$ to $y$, $w$ will be a common ancestor to either $x$ and $s$ and/or $y$ and $s$.
 
-      If the paths $p_{1}$ and $p_{2}$ do share edges, then $t$ is on $p_{1}$. Since $u$ was the last node 
-      found by BFS, $\delta(t,u) \geq \delta(t,x)$. Since $p_{2}$ is the longest path, $\delta(t,x) \geq \delta(t, u).$
-      Thus, $\delta(t, x) = \delta(t, u)$ and $\delta(u, y) = \delta(x,y)$.
+      %If the paths $p_{1}$ and $p_{2}$ do share edges, then $t$ is on $p_{1}$. 
+      
+      Case 1: $w$ is a common ancestor to $x$. 
+
+      Because $u$ is the last and farthest node discovered by the first BFS run on $s$ and $w$ is a node first discovered by BFS,
+      no other node can be further from $w$ than $u$ (some node can be of equal distance from $w$ though). Thus: $\delta(w,u) \geq \delta(w,y)$. 
+
+      Because it is given that $\delta(x,y)$ is the longest path and $w$ is an ancestor of $x$, $\delta(w,y) \geq \delta(w, u)$.
+      
+      Thus, given these two inequalities, $\delta(w, y) = \delta(w, u)$. Therefore, because $w$ is a constant distance from $x$, 
+      $\delta(u,x) = \delta(x,y)$. Hence, we have the claim.
+
+      Finally, given the claim, because in BFS, $v$ is the furthest node from $u$, $\delta(u,v) \geq \delta(u,x) = \delta(x,y)$. 
+      However, as $\delta(x,y)$ is the diameter, $\delta(x,y) \geq \delta(u,v)$. Therefore, $\delta(u,v) = \delta(x,y)$.  
+      Therefore, $(u,v)$ is the diameter of the tree $T$.
 
 
-      $\delta(x,y) \geq \delta(u, v)$ and $\delta(u, v) \geq \delta(u, y)$ so all three are equal. Thus $\delta(u, v)$
-      is the diameter of the tree.
+      Case 2: $w$ is a common ancestor to $y$.
 
-
-
-
-      Let $G$ be the original tree. Suppose $x$ and $y$ are nodes in $G$. 
-
-      maxlength ← 0
-for s ← 0 to s < |V[T]|
-      do temp ← BSF(T, S)
-            if maxlength < temp
-                   maxlength ← temp
-                   increment s by 1
-return maxlength
-
+      Symmetric with Case 1 (except replace all $x$ with $y$ and all $y$ with $x$), the same reasoning applies.
 
 
 
@@ -858,6 +896,64 @@ return maxlength
 
 
   \end{enumerate}
+      Let $T_{s}$ denote a tree rooted in the vertex $s$. Note that between any two vertices in tree $T$, there exists
+      a unique simple path between them. As such, all references to paths are unique simple paths.
+
+      For every node $v$ in the tree $T$ with children nodes $u_{0}, u_{1}, u_{2} \dots u_{k}$, 
+      the diameter of $T_{v}$ will be the max between the following:
+
+      1.the diameter of one of $v$'s subtrees $T_{u_{0}} \dots T_{u_{k}}$.
+
+      2.the longest path between two leaves from two distinct $v$ subtrees $T_{u_{0}} \dots T_{u_{k}}$, 
+      passing through and connected by $v$.
+
+      In Case 2, the longest path can be calculated by adding the heights of the two subtrees together. 
+
+      Hence, using the above two cases, we can recursively calculate the diameter of each tree bottom-up. 
+
+      {\bf Time Complexity}
+      O(V)
+
+
+      {\bf Pseudocode}
+      - The following psuedocode will store the height of the tree using a pointer. This reduces the 
+      time complexity of the algorithm by computing the height of a subtree in the same recursion.
+      
+      - $height$ should be called initially with 0.
+
+
+      \begin{algorithmic}[1]
+      \Function{calcDiameter}{tree, *height}
+      \Comment Set the height of every subtree to 0
+      \ForAll{$u \in V$}
+        \State $h[u] = 0$
+      \EndFor
+
+
+      \ForAll{$u \in V$}
+        \If {color[$u$] == white}
+          \State DFSVisit($u$)
+        \EndIf
+      \EndFor
+
+      \Comment Changes made here to list and classify edges
+      \ForAll{$(u,v) \in E$}
+        \If {$\pi$[$v$] == $u$}
+          \State print Tree Edge: ($u$,$v$)
+        \Else 
+          \Comment Parenthesis theorem to determine ancestry
+          \If {d[$u$] $<$ d[$v$] $<$ f[$v$] $<$ f[$u$]}
+            \State print Forward Edge: ($u$,$v$)
+          \ElsIf {d[$v$] $<$ d[$u$] $<$ f[$u$] $<$ f[$v$]}
+            \State print Back Edge: ($u$,$v$)
+          \Else
+            \State print Cross Edge: ($u$,$v$)
+          \EndIf
+        \EndIf
+      \EndFor
+
+    \EndFunction
+    \end{algorithmic}
 \end{document}
 
 
