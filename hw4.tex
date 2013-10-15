@@ -18,14 +18,60 @@
 \pagestyle{fancy}
 \rhead{HW 4:  Delos Chang (help from Prof.)}
 \begin{document}
-    Questions:
-      \#3 Pre and post conditions for 
-      \#6 Space and Time Complexities
   \begin{enumerate}
     %&=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& =
     % Question 1 
     %&=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& =
     \item 
+
+      Guess: $O(\log(\log(n))$
+
+      First, consider the equation without an inequality, i.e.: $T(n) = \sqrt{n} \cdot T(\sqrt{n}) + n$.
+
+      In the recurrence tree, at the top level (level 0), the sum is $n$ (the root). At level 1, before expanding, there are
+      $\sqrt{n}$ branches of $T(\sqrt{n})$.
+
+      Expanding level 1, each $T(\sqrt{n})$ expands into $\sqrt{n}$ with branches $T(n^{1/4})$. In the expanded
+      level 1, there are values $\sqrt{n}$ occurring $\sqrt{n}$ times. Therefore, the sum of the first level is also $n$.
+
+      If we expand the second and third level, under each $\sqrt{n}$ in the first level, there are values $n^{1/4}$ occuring $n^{1/4}$ times.
+      Thus, the expanded nodes would sum to $n^{1/2}$ in each subtree on the second level. There are $n^{1/2}$ occurrences of such values,
+      thus the sum of the second level is also $n$.
+
+      We see that the sum of level 0 is $n$, sum of level 1 is $n$ and sum of level 2 is $n$. Hence, we guess that at each level, the sum of each level will be $n$. 
+
+      Now we analyze how many levels there will be in the recurrence tree. 
+
+      At level 1, the quantity of nodes is $n^{\frac{1}{2}}$.
+      At level 2, the quantity of nodes is $n^{\frac{1}{2^{2}}}$.
+
+      Thus, at level $k$, the quantity of nodes would be $n^{\frac{1}{2^k}}$.
+
+      Let $k$ be the point before $n^{\frac{1}{2^k}}$ becomes less than or equal to 2 (some constant):
+
+      $$n^{\frac{1}{2^k}} \leq 2 $$
+
+      $$\frac{1}{2^k} \log n \leq 1 $$
+
+      $$ \log n \leq 2^{k} $$
+
+      $$ \log(\log n) \leq k $$
+
+      Therefore, there are $\log(\log n)$ levels. Each level contributes a sum of $n$. 
+
+      Thus, we guess the tree to sum to $n \log(\log n)$ if $T(n) = \sqrt{n} \cdot T(\sqrt{n}) + n$.
+
+      Since $T(n) < \sqrt{n} \cdot T(\sqrt{n}) + n$, then $T(n)$ also be less than the sum $n \log(\log n)$. 
+
+      Hence, we guess $O(\log(\log(n)))$.
+
+
+      %n top level,  rt n amont of T(\sqrt{n})
+      %\sqrt n num of val \sqrt n
+      %third level: n^1/4 branches with val n^1/4.     n^1/2 such subtrees
+
+      %n^ 1/2^k \leq 2  levels
+
 
 
     %&=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& =
@@ -440,6 +486,134 @@
     \bigskip
     \setcounter{equation}{0}
     \item 
+
+      {\bf Optimal Substructure}
+
+      For an employee $x$, let $x.rating$ denote the real conviviality rating of employee $x$ as given in the tree $T$. 
+
+      Either employee $x$ is invited or not. Then, there are two cases to maximize the conviviality: 
+
+      1. $x$ is not invited. Optimally select employees $y$ from the $x$'s subtree that maximizes conviviality (both direct and indirect subordinates. 
+      Indirect meaning that $x$ is not necessarily $y$'s direct boss).
+      
+      2. $x$ is invited. To maximize conviviality, optimally select employees, including $x$, from the subtrees (direct and indirect subordinates) of each $x$'s children
+      $w$ such that $w$ isn't invited.
+
+
+      {\bf Appropriate Notation}
+
+      Let $child(x)$ return the set of $x$'s {\it direct} children. 
+
+      Let $x.leftchild$ return the left child of $x$ in the given company hierarchy tree $T$.
+
+      Let $x.name$ return the name of the employee of node $x$ as represented in $T$.
+
+      Let $x.rightsibling$ return the right sibling of $x$ in the given company hierarchy tree $T$.
+
+      Let $Incl[x]$ denote the max possible sum of conviviality ratings from $x$'s subtree given that $x$ is invited. This is equivalent to \#2 in the optimal substructure
+      stated above. 
+
+      Let $Excl[x]$ denote the max possible sum of conviviality ratings from $x$'s subtree given that $x$ is not invited. This is equivalent to \#1 in the optimal substructure
+      stated above. 
+
+      {\bf Recurrence with base cases}
+
+      Using this notation, translating the optimal substructure, our objective function to maximize conviviality is:
+
+
+      \begin{displaymath}
+        Incl[x] = \left\{
+          \begin{array}{lr}
+            x.rating & \text{ if $child(x) = \emptyset$ }\\
+            x.rating + \sum_{y \in child(x)} Excl(y)  & \text{ otherwise }
+          \end{array}
+          \right.
+        \end{displaymath} 
+
+      \begin{displaymath}
+      Excl[x] = \left\{
+        \begin{array}{lr}
+          0 & \text{ if $child(x) = \emptyset$ }\\
+          \sum_{y \in child(x)} max( Incl[y], Excl[y])   & \text{ otherwise }
+        \end{array}
+        \right.
+      \end{displaymath} 
+
+
+      {\bf Pseudocode: Optimal Value of Objective Function}
+
+      {\it Overview:}
+
+      Call $compute(pres)$ will update the Incl and Excl arrays for all employees under $pres$. 
+      Then using $max(Incl[pres], Excl[pres])$, it will return the max conviviality rating possible for the hierarchy subtree under the president.
+
+      In other words, it returns the optimal value of the objective function under any arbitrary employee $x$.
+
+      \begin{algorithmic}[1]
+        \Function{compute}{$x$, $Incl$, $Excl$}
+          \State $Incl[x] = x.rating$
+          \State $Excl[x] = 0$
+
+          \State $c = x.leftchild$
+
+          \While{$c$ != null}
+            \State $compute(c, Incl, Excl)$
+            \State $Incl[x] += Excl[c]$
+            \State $Excl[x] += max(Incl[c], Excl[c])$
+            \State $c = c.rightsibling$
+          \EndWhile
+
+          \State return($max(Incl[x], Excl[x])$)
+        \EndFunction
+      \end{algorithmic}
+
+      {\it Time and Space Complexity:}
+
+      In the hierarchy tree with $V$ vertices, the time complexity is $\Theta(V)$ because the algorithm employs
+      a single recursive traversal of the tree. 
+
+      The space complexity is $\Theta(V)$ because the $Incl$ and $Excl$ arrays have a position for each vertex (employee).
+
+
+      {\bf Pseudocode: Optimal Solution}
+
+      {\it Overview:}
+      $x$ is an arbitrary employee. We treat $x$ as the source node. 
+
+      $b$ is a boolean that can either be $0$ or $1$. $printInv(x, 0)$ means that $x$ prints
+      the best list possible that maximizes conviviality under the constraint that $x$ is excluded. 
+      
+      $printInv(x, 1)$ means print the best list possible (whether or not $x$ is excluded is of no consequence).
+
+      We use the $Incl$ and $Excl$ arrays as before and can call $printInv(root, 1)$ to initialize. 
+
+      \begin{algorithmic}[1]
+        \Function{printInv}{$x$, $b$}
+          \If{$b == 1$}
+            \If{$Incl[x] > Excl[x]$}
+              \State print $x.name$
+              \State $b' = 0$
+            \Else
+              \State $b' = 1$
+            \EndIf
+          \Else
+            \State $b' == 1$
+          \EndIf
+
+          \State $c = x.leftchild$
+          \While{$c$ != $null$}
+            \State $printInv(c, b')$
+            \State $c = c.rightsibling$
+          \EndWhile
+        \EndFunction
+      \end{algorithmic}
+
+      {\it Time and Space Complexity:}
+
+      The time complexity is $\Theta(V)$ because the method $printInv$ is called on every node in tree $T(V,E)$ with a 0 or 1.
+
+      In the $printInv$ function, we do not take any more space because the $Incl$ and $Excl$ arrays are already defined. 
+      Thus, the entire algorithm ($printInv$ and $compute$)'s space complexity is still $\Theta(V)$.
 
 
   \end{enumerate}
