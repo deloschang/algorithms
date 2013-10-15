@@ -445,7 +445,7 @@
       deduce the corner of $C[1,m]$.
       Thus, the running time is $\Theta(m^2)$.
 
-      The space complexity is $O(m^2)$ because two $m$ by $m$ matrices are needed. 
+      The space complexity is $\Theta(m^2)$ because two $m$ by $m$ matrices are needed. 
 
 
       {\bf Pseudocode: Optimal Solution}
@@ -478,7 +478,9 @@
       {\it Time and Space Complexity:}
       The algorithm can run through at most $m$ rows and $m$ columns. Thus, it runs $\Theta(m)$.
 
-      The space complexity is $O(m^2)$ because two $m$ by $m$ matrices are needed. 
+      No additional space complexity is added because $C$ and $d$ were already defined by the $calcPalindrome$ function. 
+
+      Thus the entire algorithm's ($calcPalindrome$ and $printLPS$) space complexity is still $\Theta(m^2)$.
 
     %&=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& =
     % Question 7 
