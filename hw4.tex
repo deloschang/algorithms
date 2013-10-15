@@ -20,6 +20,7 @@
 \begin{document}
     Questions:
       \#3 Pre and post conditions for 
+      \#6 Space and Time Complexities
   \begin{enumerate}
     %&=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& =
     % Question 1 
@@ -350,10 +351,10 @@
       {\it Overview:}
 
       The algorithm takes in a string in the form of an array of length $m$ (not zero-indexed). 
-      The $C[1\dots n, 1\dots n]$ table defines cells with the length of the LPS.
-      The $b[1\dots n, 1\dots n]$ table shows an arrow pointing to the optimal subproblem solution. For instance, 
-      $b[i, j]$ has an arrow pointing to the solution used to fill in $C[i, j]$.
-      
+      The $C[1\dots m, 1\dots m]$ table defines cells with the length of the LPS, filled left to right.
+      The $b[1\dots m, 1\dots m]$ table shows an arrow pointing to the optimal subproblem solution. For instance, 
+      $d[i, j]$ has an arrow pointing to the solution used to fill in $C[i, j]$.
+
 
       \begin{algorithmic}[1]
         \Function{calcPalindrome}{$m$, $W[1\dots m]$}
@@ -393,8 +394,45 @@
         \EndFunction
       \end{algorithmic}
 
+      {\it Time and Space Complexity:}
+      The two $for$ loops on line (14) and (15) make the algorithm look through $m$ columns and $m$ rows (ignoring constants) to 
+      deduce the corner of $C[1,m]$.
+      Thus, the running time is $\Theta(m^2)$.
+
+      The space complexity is $O(m^2)$ because two $m$ by $m$ matrices are needed. 
+
 
       {\bf Pseudocode: Optimal Solution}
+
+      {\it Overview:}
+
+      We start at $d[1, m]$ and trace back through by following the arrows computed in $calcPalindrome$.
+      In the following $printLPS$, $i$ is the first index and $j$ is the second index for table $d$. 
+
+      We assume that the ``.'' (period) indicates a concatenation of strings like in PHP. 
+
+      Initially, call $printLPS$($1, m, d, W, subsequence$).
+
+      \begin{algorithmic}[1]
+        \Function{printLPS}{$i$, $j$, $d$, $W[1\dots m]$, $subsequence$}
+          \If{$i>j$}
+            \State return $subsequence$
+          \ElsIf{$i == j$}
+            \State return $subsequence$ . $W[j]$
+          \ElsIf{$d[i,j] == "\downarrow"$}
+            \State return $printLPS(i+1, j, d, W, subsequence)$
+          \ElsIf{$d[i,j] == "\swarrow"$}
+            \State return $W[i]$ . $printLPS(i+1, j-1, d, W, subsequence)$ . $W[j]$
+          \ElsIf{$d[i,j] == "\leftarrow"$}
+            \State return $printLPS(i, j-1, d, W, subsequence)$
+          \EndIf
+        \EndFunction
+      \end{algorithmic}
+
+      {\it Time and Space Complexity:}
+      The algorithm can run through at most $m$ rows and $m$ columns. Thus, it runs $\Theta(m)$.
+
+      The space complexity is $O(m^2)$ because two $m$ by $m$ matrices are needed. 
 
     %&=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& =
     % Question 7 
