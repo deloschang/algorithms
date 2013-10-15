@@ -344,8 +344,123 @@
     %&=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& =
     \bigskip
     \setcounter{equation}{0}
-
     \item 
+      {\bf Optimal Substructure}
+
+      Given the directed acyclic graph $G = (V,E)$, let $u$ be an arbitrary vertex in the graph $G$.
+
+      Let $s$ be the source vertex and $t$ be the target vertex as defined by the problem.
+
+      Given the edge $(u,v)$, let $weight(u,v)$ denote the real-valued edge weights of $(u,v)$.
+
+      To find the longest weighted simple path from $s$ to $t$, there are two cases:
+      
+      1. If $u = t$, then it is vacuously true that $weight(u,t) = 0$.
+
+      2. If $u \neq t$, then the longest weighted simple path can be found by taking the largest sum of
+      (a) a weighted edge $weight(u,v)$ and (b) weight of the longest path from second vertex $v$ to $t$.
+      
+      To show \#2, let $x$ be the longest path from $u$ to $t$, given that $u \neq t$. Let $v$ be the 
+      second vertex on path $x$. Let $x'$ be the path from $v$ to $t$.
+
+      {\it Claim 1: $x'$ must be a longest path from $v$ to $t$}
+
+      We show this by proof by contradiction. We assume that $x$ (the path from $u$ to $t$ is the longest path). 
+
+      Also assume that a longer path $p$ exists from $v$ to $t$. We can form a path $u \rightarrow v$ then from 
+      $v$ to $t$ through path $p$. However, because $G$ is acyclic, this path is longer than 
+      $x$ because $p$ is longer than $x'$ (and $u \rightarrow v$ remains the same).
+      
+      Hence, we have a contradiction and proven Claim 1. 
+
+
+
+      {\bf Appropriate Notation}
+
+      Given the edge $(u,v)$, let $weight(u,v)$ denote the real-valued edge weights of $(u,v)$.
+
+      Let $length[u]$ be the weight of a longest path from the source vertex $u$ to target vertex $t$.
+
+
+      {\bf Recurrence with base cases}
+
+      With the notation above and Claim 1, we can write the following recurrence: 
+
+      \begin{displaymath}
+        length[u] = \left\{
+          \begin{array}{lr}
+            0  &   \text{ if $u == t$}\\
+            \text{$max_{(u,v)\in E}$( (length[v] + weight(u,v)))}  &  \text{ if $u \neq t$ }
+          \end{array}
+          \right.
+        \end{displaymath} 
+
+
+
+      {\bf Pseudocode: Optimal Value of Objective Function}
+
+      {\it Overview:}
+
+      We first topologically sort the vertices then solve in topological order from $s$ to $t$ bottom-up.
+
+      $s$ is the source vertex. $t$ is the target vertex. 
+
+      We use the $length$ array to memoize the results of our objective function subproblems.
+
+      We use the $move$ array, we reconstruct the solution for printing.
+
+      \begin{algorithmic}[1]
+        \Function{calcLength}{$G(V,E)$, $s$, $t$}
+          \State Topologically sort $G$
+          \ForAll{$j=1$ to $|V|$}
+            \State $length[j] = -\infty$
+          \EndFor
+
+          \State $length[s] = 0$
+          \ForAll{ $u$ in topological order from $s$}
+            \ForAll{$(u,v) \in E$}
+              \If {$weight(u,v) + length[u] > length[v]$}
+                \Comment Found better weighted longest path
+                \State $move[u] = v$
+                \State $length[v] = length[u] + weight(u,v)$
+              \EndIf
+            \EndFor
+          \EndFor
+          \State return $length[t]$
+        \EndFunction
+      \end{algorithmic}
+
+      {\it Time and Space Complexity:}
+
+      The algorithm runs in $\Theta(V+E)$ time. The topological sort takes $\Theta(V+E)$ time. We look through each of the
+      edges in the adjacency list for vertices in the topological sort from $s$ to $t$. 
+
+      The space complexity will be $\Theta(V)$ because we use two arrays that take up $V$ space (for each vertex, there is
+      a position). 
+
+      {\bf Pseudocode: Optimal Solution}
+
+      {\it Overview:}
+      Given the data stored in the $move$ array, we can reconstruct the solution
+
+      \begin{algorithmic}[1]
+        \Function{printSimplePath}{$move$, $s$, $t$}
+          \State print $s$
+          \State $v = move[s]$
+          \While{ $v \neq t$}
+            \State print $v$
+            \State $v = move[v]$
+          \EndWhile
+        \EndFunction
+      \end{algorithmic}
+
+      {\it Time and Space Complexity:}
+
+      $move$ array will hold the vertices on the longest path, according to $calcLength$. 
+      The longest path holds at least 2 vertices and at most $|V|$ vertices. Thus, the time complexity of this algorithm $\Theta(V)$.
+
+      $printSimplePath$ does not add any more space to the complexity of the algorithm because $move$, $s$ and $t$ are already
+      defined. Thus, the entire algorithm's ($printSimplePath$ and $calcLength$) space complexity is still $\Theta(V)$.
 
     %&=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& =
     % Question 6 
