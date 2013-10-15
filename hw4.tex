@@ -18,6 +18,8 @@
 \pagestyle{fancy}
 \rhead{HW 4:  Delos Chang (help from Prof.)}
 \begin{document}
+    Questions:
+      \#3 Pre and post conditions for 
   \begin{enumerate}
     %&=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& =
     % Question 1 
@@ -149,7 +151,25 @@
     \item
       We modify the Mergesort algorithm on page 31 and 34.
       
-      Given an array $A$ of ints size $n$, initialize the following pseudocode with $countInv(A, 1, n)$: 
+      Given an array $A$ of ints size $n$, initialize the following pseudocode with $inversions(A, n)$: 
+
+      {\bf Pseudocode:}
+      \begin{algorithmic}[1]
+        \Function{inversions}{$A, n$}
+          \State $count = countInv(A, 1, n)$
+          \State return $count$
+        \EndFunction
+      \end{algorithmic}
+
+      {\it Pre-Condition:}
+
+       - $n \geq 1$
+
+      {\it Post-Condition:}
+
+        - $count$ is the number of inversions in  $A[1 \dots n]$
+
+        - $A[1\dots n]$ is a sorted permutation of the original array, $A'[1\dots n]$.
 
       {\bf Pseudocode:}
       \begin{algorithmic}[1]
@@ -171,28 +191,87 @@
 
       {\it Post-Condition:}
 
-      - $count$ is the number of inversions in  $A[p \dots r]$
+        - $A[p\dots r]$ is a sorted permutation of the original array, $A'[p \dots r]$
 
-        - $A[p\dots r]$ is a sorted permutation of $A'[p \dots r]$
+        - for all $(m < p) \wedge (m > r), A[m] = A'[m]$
 
-        - for all $(m < i) \wedge (m > j), A[m] = A'[m]$
+        - $count$ is the number of inversions in the {\it new} sorted permutation $A[p \dots r]$
+
       
 
 
 
       {\bf Pseudocode:}
       \begin{algorithmic}[1]
-        \Function{main}{$A, p, r$}
+        \Function{main}{$A, p:$ first index of 1st seg, $q$:ending index of 1st seg, $r$:ending index of 2nd seg}
+          \State $n_{1} = q - p + 1$
+          \Comment Checking length of subarrays
+          \State $n_{2} = r - q$
+          \State let $L[1\dots n_{1} + 1]$ and $R[1\dots n_2 + 1]$ be new arrays
+          \ForAll{$i = 1$ to $n_1$}
+            \State $L[i]  = A[p + i - 1]$
+          \EndFor
+          \ForAll{$j = 1$ to $n_2$}
+            \State $R[j] = A[q + j]$
+          \EndFor
+
+          \Comment add sentinel to know when to stop
+          \State $L[n_1 + 1] = \infty$
+          \State $R[n_2 + 1] = \infty$
+
+          \State $i = 1$
+          \State $j = 1$
+
+          \State $checked = false$
+          \State $count = 0$
+
+          \ForAll{$k = p$ to $r$}
+            \If {$L[i] > R[j] $ and $checked = false$}
+              \State $checked = true$
+              \State $count += n_1 - i + 1$
+            \EndIf
+
+            \If {$L[i] \leq R[j]$}
+              \State $A[k] = L[i]$
+              \State $i++$
+            \Else 
+              \State $A[k] = R[j]$
+              \State $j++$
+              \State $checked = false$
+            \EndIf
+          \EndFor
+          \State return count
         \EndFunction
       \end{algorithmic}
 
       {\it Pre-Condition:}
 
-       - $p \leq r$
+        - $p \leq q \leq r \wedge$ $A[p\dots q]$ is sorted $\wedge$ $A[q+1\dots r]$ is sorted 
 
       {\it Post-Condition:}
 
-       - 
+        - $A[p\dots r]$ is a sorted permutation of $A'[p \dots r]$
+
+        - for all $(m < p) \wedge (m > r), A[m] = A'[m]$
+
+        - $count$ is the number of inversions in the {\it new} sorted permutation $A[p \dots r]$
+
+
+
+      
+     {\bf Time Complexity}
+      
+        - Merge sort's time complexity is $\Theta(n \cdot log n)$. To modify the original Merge Sort, we added lines that only
+        take constant amount of time (assignments and constant time if statement checks):
+
+        - In $countInv$, the initializations and assignments of $count$ take $\Theta(1)$ time.
+
+        - Assignment on line (15) and (16) of $main$ take $\Theta(1)$ time.
+
+        - on lines (18) - (21) of $main$, the $if$ statement checks for an inversion. The checks and assignments take $\Theta(1)$.
+
+        Hence, the time complexity for this algorithm is the same as merge sort: $\Theta(n \cdot log n)$.
+        
 
 
 
@@ -203,18 +282,12 @@
     %&=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& =
     \par
     \bigskip
+    \pagebreak
     \setcounter{equation}{0}
     
     \item 
-      Because $f'(n) = O(f(n))$, there exist positive real constants $c_{0}$, $n_{0}$ such that for all $n \geq n_{0}$, 
-      $f'(n) \leq c_{0} \cdot f(n)$. Note that because $c_{0} > 0$, the inequalities are preserved.
-    \begin{align}
-      f'(n) = O(f(n))                                   &&\text{Given }\\
-      f'(n) \leq c_{0} \cdot f(n) \text{ for all } n \geq n_{0}          &&\text{Def of $O$}\\
-      \frac{1}{c_{0}} \cdot f'(n) \leq \cdot f(n) \text{ for all } n \geq n_{0}          &&\text{Math}\\
-      f(n) \geq c_{1} \cdot f'(n) \text{ for all } n \geq n_{0}          &&\text{Math: $c_{1} = \frac{1}{c_{0}}$}\\
-      f(n)  = \Omega(f'(n))                               &&\text{Def of $\Omega$}
-    \end{align}
+
+
 
     
     %&=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& &=& =
