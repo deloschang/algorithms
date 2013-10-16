@@ -11,6 +11,7 @@
 \usepackage{amsmath, amsthm, amssymb, fancyhdr, tikz, algorithmicx, algpseudocode, algorithm}
 \usepackage{mathtools}
 \DeclarePairedDelimiter{\floor}{\lfloor}{\rfloor}
+\DeclarePairedDelimiter{\ceil}{\lceil}{\rceil}
 \usetikzlibrary{arrows}
 \newcommand{\justif}[2]{&{#1}&\text{#2}}
 \renewcommand{\algorithmicforall}{\textbf{for each}}
@@ -367,6 +368,23 @@
 
       Our objective function needs to minimize the $cost[i,j]$ of every line containing words $i \dots j$. 
 
+      We use a heuristic to simplify some calculations. 
+
+      A line containing words $a\dots b$ contains $b - a + 1$ number of words.
+      
+      Because each word is at least 1 character long and includes a space
+      when placed onto a line, the maximum number of words on a line must be: 
+      
+      $$\ceil{\frac{M}{2}}$$ 
+
+      Thus, for a line containing words $i \dots j$:
+
+      \begin{align}
+        j - i + 1 > \ceil{\frac{M}{2}} \rightarrow spaces[i,j] < 0
+      \end{align}
+
+      We incorporate this in the pseudocode for the optimization of the objective function.
+
       Let the term ``optimally wrapped'' mean to minimize the sum of the cubes of the numbers of extra space characters
       over all the lines. 
 
@@ -416,7 +434,7 @@
         wrap[j] = \left\{
           \begin{array}{lr}
             0  &   \text{ if $j=0$}\\
-            min_{1 \leq i \leq j} (cost[i,j] + c[i -1])  &   \text{ if $j > 0$}\\
+            min_{1 \leq i \leq j} (cost[i,j] + wrap[i -1])  &   \text{ if $j > 0$}\\
           \end{array}
           \right.
         \end{displaymath} 
@@ -426,14 +444,108 @@
       {\bf Pseudocode: Optimal Value of Objective Function}
 
       {\it Overview:}
+      We use a $wrap$ array to save the solutions to the subproblems. As we see in the recurrence, the final 
+      result of $wrap[n]$ will depend on these subproblems.
 
+      Furthermore, we use a $trace$ array to mark where to wrap the line.
+
+      Finally, from our observation in (1), we only calculate $i$ and $j$ values for which 
+
+      $$ j - i + 1 \leq \ceil{\frac{M}{2}} $$
+
+      This will be reflected in the for loop header in lines (4), (9), (24).
+
+      \begin{algorithmic}[1]
+        \Function{computeWraps}{$n$, $M$, $l$}
+
+          \Comment Fill basic parts of $spaces$ table
+          \ForAll{$k=1$ to $n$}
+            \State $spaces[k,k] = M - l_{i}$
+            \Comment Fill based on the spaces formula 
+            \ForAll{$i=k+1$ to $k + \ceil{\frac{M}{2}} - 1$}
+              \State $spaces[k,i] = spaces[k, i-1] - 1 - l_{i}$
+            \EndFor
+          \EndFor
+
+          \ForAll{$i=1$ to $n$}
+            \ForAll{$j=i$ to $i + \ceil{\frac{M}{2}} - 1$}
+              \If{$spaces[i,j] \geq 0$ and $j == n$}
+                \State $cost[i,j] = 0$
+              \ElsIf{$spaces[i,j] < 0$}
+                \State $cost[i,j] = \infty$
+              \Else
+                \State $cost[i,j] = (spaces[i,j])^3$
+              \EndIf
+            \EndFor
+          \EndFor
+
+          \Comment Set Base Cases
+          \State $wrap[0]=0$
+          \ForAll{$k=1$ to $n$}
+            \State $wrap[k] = \infty$
+          \EndFor
+
+          \ForAll{$j=1$ to $n$}
+            \Comment Heuristic to skip when words don't fit in line
+            \ForAll{$i=max(1, 1 + j - \ceil{\frac{M}{2}})$ to $j$}
+              \If{$wrap[j] > wrap[i-1] + cost[i,j]$}
+                \State $trace[j] = i$
+                \State $wrap[j] = wrap[i-1] + cost[i,j]$
+              \EndIf
+            \EndFor
+          \EndFor
+
+
+        \EndFunction
+      \end{algorithmic}
+      
       {\it Time and Space Complexity:}
+
+      We used to the heuristic to limit our loops to the bound that no more than $\ceil{M}{2}$ words can fit on 
+      a line. The outer loops still run through $n$ though, so the runtime will be $\Theta(M \cdot n)$.
+
+      The space complexity was also bound to the constraint of no more than $\ceil{M}{2}$ fitting on a line. We see
+      that no more than $n \cdot M$ is allocated in $spaces$, $cost$, $wrap$ and $trace$. Thus, the space complexity is
+      also $\Theta(M \cdot n)$.
+
 
       {\bf Pseudocode: Optimal Solution}
 
       {\it Overview:}
 
+      We use the $trace$ array and start from $trace[n]$ to see where the last line starts. This last line should then end
+      at word $n$. Similarly, we can recursively find where the preceding line starts by checking the $trace$ of the 
+      ending word of that line.
+
+      $end$ will be the last word of the line. 
+
+      We initialize this algorithm with $printLines(trace, n)$ where $n$ is the last word.
+
+      \begin{algorithmic}[1]
+        \Function{printLines}{$trace$, $end$}
+          \Comment Find the first word of the line
+          \State $first = trace[end]$
+
+          \Comment Base Case
+          \If {$first == 1$}
+            \State $line = 1$
+          \Else
+            \State $line = 1 + printLines(trace, first - 1)$
+          \EndIf
+
+          \State print $first, end, line$
+          \State return $line$
+
+        \EndFunction
+      \end{algorithmic}
+
+
       {\it Time and Space Complexity:}
+
+      This algorithm, in total, recursively calls printLines on at most every word. Thus, the time complexity is $O(n)$.
+
+      $printInv$ does not add any additional space requirements because $trace$ and $end$ are already defined. Thus,
+      the algorithm as a whole ($printInv$ and $computeWraps$) still takes $\Theta(M \cdot n)$ space. 
 
 
 
