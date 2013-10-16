@@ -60,9 +60,9 @@
 
       Therefore, there are $\log(\log n)$ levels. Each level contributes a sum of $n$. 
 
-      Thus, we guess the tree to sum to $n \log(\log n)$ if $T(n) = \sqrt{n} \cdot T(\sqrt{n}) + n$.
+      Thus, we guess the tree will sum to $n \log(\log n)$ if $T(n) = \sqrt{n} \cdot T(\sqrt{n}) + n$.
 
-      Since $T(n) < \sqrt{n} \cdot T(\sqrt{n}) + n$, then $T(n)$ also be less than the sum $n \log(\log n)$. 
+      Since $T(n) < \sqrt{n} \cdot T(\sqrt{n}) + n$, then $T(n)$ will also be less than the sum $n \log(\log n)$. 
 
       Hence, we guess $O(\log(\log(n)))$.
 
@@ -84,15 +84,14 @@
     \item 
       {\bf Overview:}
 
-      1. Given graph G=(V,E), run SCC(G), as defined in class, 
+      Given graph G=(V,E), run SCC(G), as defined in class, 
       forming the component graph $G^{SCC} = (V^{SCC}, E^{SCC})$, a DAG. 
 
-      2. Let $k$ denote the number of vertices in $V^{SCC}$. Run topological sort on the component graph $G^{SCC}$, 
+      Let $k$ denote the number of vertices in $V^{SCC}$. Run topological sort on the component graph $G^{SCC}$, 
       which will produce a linear order of vertices $V_{chain} = \{v_{0}, v_{1}, v_{2} \dots v_{k}\}$. 
 
-      3. Check that this linear ordering of vertices is a chain. 
-      In other words, check that from $i=0$ to $i=k-1$, $v_{i},v_{i+1} \in V_{chain}$ (assuming $v_{0}$ is the first vertex
-      , the edge $(v_{i},v_{i+1}) \in E^{SCC}$.
+      Check that this linear ordering of vertices is a chain. 
+      In other words, check that from $i=0$ to $i=k-1$, (assuming $v_{0}$ is the first vertex), the edge $(v_{i},v_{i+1}) \in E^{SCC}$.
       Note that $V_{chain}$ is not necessarily a linearly ordered chain.
 
       If edges $(v_{0}, v_{1}), (v_{1},v_{2}),\dots,(v_{k-1},v_{k}) \in E^{SCC}$, then $G$ is a semi-connected graph.
@@ -183,7 +182,7 @@
       Running Topological Sort on $G^{SCC}$ with DFS in reducing finishing times as defined in class takes $O(V+E)$ because.
       $G^{SCC}$ has at most $|V|$ vertices and $|E|$ edges. 
       To check the linearly ordered chain, the algorithm will check each vertex $v_{i}$ in $G^{SCC}$'s adjacency list to check for
-      $(v_{i}, v_{i+1})$. Thus, the adjacency list is checked exactly once. Thus, $O(V+E)$.
+      $(v_{i}, v_{i+1})$. Thus, the adjacency list is checked exactly once. Runtime to check adjacency list is $O(V+E)$.
 
       Hence, the time complexity of this algorithm is $\Theta(V+E)$.
 
@@ -318,7 +317,8 @@
 
         - on lines (18) - (21) of $main$, the $if$ statement checks for an inversion. The checks and assignments take $\Theta(1)$.
 
-        Hence, the time complexity for this algorithm is the same as merge sort: $\Theta(n \cdot log n)$.
+        Hence, the time complexity for this algorithm is the same as merge sort: $\Theta(n \cdot log n)$ and by definition,
+        also $O(n \cdot log n)$.
         
 
 
@@ -343,7 +343,7 @@
       If $spaces[i,j]$ is negative, that means that the words $i \dots j$ do not fit on the line. 
       
       Next, let $cost[i,j]$ be the cost (in terms of extra spaces) of the line with words $i \dots j$. We aim to minimize
-      this cost over all lines. Note the cost will be different than $space[i,j]$ because of the different rules
+      this cost over all lines. Note $cost[i,j]$ and $space[i,j]$ will not necessarily be the same because of the different rules
       applied to it.
 
       There are three cases for $cost[i,j]$:
@@ -380,7 +380,7 @@
       Thus, for a line containing words $i \dots j$:
 
       \begin{align}
-        j - i + 1 > \ceil{\frac{M}{2}} \rightarrow spaces[i,j] < 0
+        \text{if } j - i + 1 > \ceil{\frac{M}{2}} \rightarrow spaces[i,j] < 0
       \end{align}
 
       We incorporate this in the pseudocode for the optimization of the objective function.
@@ -395,6 +395,8 @@
 
       {\bf The optimal substructure:}
       
+      Consider $i$ the first word in the last line.
+
       The minimized cost of words $1\dots j$ can be calculated by adding the minimized cost of words $1\dots i-1$ 
       to the last line's
       cost: i.e., $cost[i,j]$ where $i$ is the first word in the last line and $j$ is the last word in the last line. 
@@ -409,8 +411,8 @@
       assume that $1 \dots i-1$ are not optimally wrapped. Then, there exists some other arrangement of $1 \dots i-1$ that
       {\it is} optimally wrapped. We can paste this optimally wrapped arrangement of $1 \dots i-1$ over A's portion of
       $1 \dots i-1$ to form a new arrangement A'. Since
-      the last line $i \dots j$ does not change, arrangement A' will be the more optimal arrangement (less extra space), 
-      which contradicts the earlier statement that A was optimal arrangement. 
+      the last line $i \dots j$ does not change, arrangement A' will be the more optimal arrangement (less extra space, compared
+      to A), which contradicts the earlier statement that A was optimal arrangement. 
 
       Hence, by contradiction, we have the claim.
 
@@ -501,10 +503,10 @@
       
       {\it Time and Space Complexity:}
 
-      We used to the heuristic to limit our loops to the bound that no more than $\ceil{M}{2}$ words can fit on 
+      We used to the heuristic to limit our loops to the bound that no more than $\ceil{\frac{M}{2}}$ words can fit on 
       a line. The outer loops still run through $n$ though, so the runtime will be $\Theta(M \cdot n)$.
 
-      The space complexity was also bound to the constraint of no more than $\ceil{M}{2}$ fitting on a line. We see
+      The space complexity was also bound to the constraint of no more than $\ceil{\frac{M}{2}}$ fitting on a line. We see
       that no more than $n \cdot M$ is allocated in $spaces$, $cost$, $wrap$ and $trace$. Thus, the space complexity is
       also $\Theta(M \cdot n)$.
 
